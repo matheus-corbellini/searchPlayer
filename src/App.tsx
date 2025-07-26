@@ -1,12 +1,12 @@
 import { AuthProvider } from "./contexts/AuthContext";
 import { ThemeProvider } from "./contexts/ThemeContext";
-import AppRoutes from "./routes/AppRoutes";
+import AppContent from "./components/AppContent/AppContent";
 
 function App() {
   return (
     <AuthProvider>
       <ThemeProvider>
-        <AppRoutes />
+        <AppContent />
       </ThemeProvider>
     </AuthProvider>
   );
