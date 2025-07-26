@@ -4,6 +4,7 @@ import type React from "react";
 import { useState, useEffect, type ReactNode } from "react";
 import type { User } from "../types/User";
 import { AuthContext } from "./AuthContextDef";
+import { authService } from "../services/authService";
 
 interface AuthProviderProps {
   children: ReactNode;
@@ -15,9 +16,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   useEffect(() => {
     // Check for stored user session
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
+    const currentUser = authService.getCurrentUser();
+    if (currentUser) {
+      setUser(currentUser);
     }
     setIsLoading(false);
   }, []);
@@ -25,23 +26,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const login = async (email: string): Promise<boolean> => {
     setIsLoading(true);
     try {
-      // Mock login - replace with real API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      const mockUser: User = {
-        id: "1",
-        email,
-        name: email.split("@")[0],
-        favoriteTeams: [],
-        favoritePlayers: [],
-        preferences: {
-          theme: "light",
-          language: "pt",
-        },
-      };
-
-      setUser(mockUser);
-      localStorage.setItem("user", JSON.stringify(mockUser));
+      const user = await authService.login(email);
+      setUser(user);
       return true;
     } catch (error) {
       console.error("Login error:", error);
@@ -54,23 +40,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const register = async (email: string, name: string): Promise<boolean> => {
     setIsLoading(true);
     try {
-      // Mock registration - replace with real API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      const mockUser: User = {
-        id: Date.now().toString(),
-        email,
-        name,
-        favoriteTeams: [],
-        favoritePlayers: [],
-        preferences: {
-          theme: "light",
-          language: "pt",
-        },
-      };
-
-      setUser(mockUser);
-      localStorage.setItem("user", JSON.stringify(mockUser));
+      const user = await authService.register(email, name);
+      setUser(user);
       return true;
     } catch (error) {
       console.error("Registration error:", error);
@@ -80,16 +51,29 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
-  const logout = () => {
-    setUser(null);
-    localStorage.removeItem("user");
+  const logout = async () => {
+    setIsLoading(true);
+    try {
+      await authService.logout();
+      setUser(null);
+    } catch (error) {
+      console.error("Logout error:", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const updateUser = (updates: Partial<User>) => {
+  const updateUser = async (updates: Partial<User>) => {
     if (user) {
-      const updatedUser = { ...user, ...updates };
-      setUser(updatedUser);
-      localStorage.setItem("user", JSON.stringify(updatedUser));
+      setIsLoading(true);
+      try {
+        const updatedUser = await authService.updateUser(updates);
+        setUser(updatedUser);
+      } catch (error) {
+        console.error("Update user error:", error);
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
 

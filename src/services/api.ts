@@ -74,8 +74,9 @@ const mockTeams: Team[] = [
 ];
 
 class ApiService {
-  private baseUrl = "https://api-football-v1.p.rapidapi.com/v3";
-  private apiKey = "your-api-key-here";
+  // TODO: Replace with real API configuration when implementing real API calls
+  // private baseUrl = "https://api-football-v1.p.rapidapi.com/v3";
+  // private apiKey = "your-api-key-here";
 
   async searchPlayers(filters: SearchFilters): Promise<Player[]> {
     // Mock implementation - replace with real API call

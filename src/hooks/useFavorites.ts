@@ -15,22 +15,22 @@ export const useFavorites = () => {
     }
   }, [user]);
 
-  const toggleFavoritePlayer = (playerId: number) => {
+  const toggleFavoritePlayer = async (playerId: number) => {
     const newFavorites = favoritePlayers.includes(playerId)
       ? favoritePlayers.filter((id) => id !== playerId)
       : [...favoritePlayers, playerId];
 
     setFavoritesPlayers(newFavorites);
-    updateUser({ favoritePlayers: newFavorites });
+    await updateUser({ favoritePlayers: newFavorites });
   };
 
-  const toggleFavoriteTeam = (teamId: number) => {
+  const toggleFavoriteTeam = async (teamId: number) => {
     const newFavorites = favoriteTeams.includes(teamId)
       ? favoriteTeams.filter((id) => id !== teamId)
       : [...favoriteTeams, teamId];
 
     setFavoriteTeams(newFavorites);
-    updateUser({ favoriteTeams: newFavorites });
+    await updateUser({ favoriteTeams: newFavorites });
   };
 
   const isPlayerFavorite = (playerId: number) =>

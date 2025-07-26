@@ -1,9 +1,14 @@
+import { AuthProvider } from "./contexts/AuthContext";
+import { ThemeProvider } from "./contexts/ThemeContext";
+import AppRoutes from "./routes/AppRoutes";
+
 function App() {
   return (
-    <div className="App">
-      <h1>Search Player</h1>
-      <p>Projeto pronto para desenvolvimento!</p>
-    </div>
+    <AuthProvider>
+      <ThemeProvider>
+        <AppRoutes />
+      </ThemeProvider>
+    </AuthProvider>
   );
 }
 

@@ -72,7 +72,16 @@ const Header: React.FC<HeaderProps> = ({ onMenuToggle }) => {
           {user && (
             <div className="user-menu">
               <span className="user-name">Olá, {user.name}</span>
-              <button className="btn btn-ghost btn-sm" onClick={logout}>
+              <button
+                className="btn btn-ghost btn-sm"
+                onClick={async () => {
+                  try {
+                    await logout();
+                  } catch (error) {
+                    console.error("Logout error:", error);
+                  }
+                }}
+              >
                 Sair
               </button>
             </div>

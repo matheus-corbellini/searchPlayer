@@ -1,33 +1,40 @@
 import React from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import "./Sidebar.css";
 import { useAuth } from "../../../hooks/useAuth";
 
 interface SidebarProps {
   isOpen: boolean;
   onClose: () => void;
-  currentPage: string;
-  onNavigate: (path: string) => void;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({
-  isOpen,
-  onClose,
-  currentPage,
-  onNavigate,
-}) => {
+const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
   const { user } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const menuItems = [
-    { id: "search", label: "Buscar Jogadores", icon: "🔍" },
-    { id: "favorites", label: "Favoritos", icon: "⭐" },
-    { id: "rankings", label: "Rankings", icon: "🏆" },
-    { id: "top-players", label: "Top Jogadores", icon: "👑" },
-    { id: "compare", label: "Comparar", icon: "⚖️" },
+    { id: "search", label: "Buscar Jogadores", icon: "🔍", path: "/search" },
+    { id: "favorites", label: "Favoritos", icon: "⭐", path: "/favorites" },
+    { id: "rankings", label: "Rankings", icon: "🏆", path: "/rankings" },
+    {
+      id: "top-players",
+      label: "Top Jogadores",
+      icon: "👑",
+      path: "/top-players",
+    },
+    { id: "compare", label: "Comparar", icon: "⚖️", path: "/compare" },
   ];
 
-  const handleItemClick = (pageId: string) => {
-    onNavigate(pageId);
+  const handleItemClick = (path: string) => {
+    navigate(path);
     onClose();
+  };
+
+  const getCurrentPage = () => {
+    const path = location.pathname;
+    const menuItem = menuItems.find((item) => item.path === path);
+    return menuItem ? menuItem.id : "search";
   };
 
   if (!user) return null;
@@ -60,8 +67,10 @@ const Sidebar: React.FC<SidebarProps> = ({
           {menuItems.map((item) => (
             <button
               key={item.id}
-              className={`nav-item ${currentPage === item.id ? "active" : ""}`}
-              onClick={() => handleItemClick(item.id)}
+              className={`nav-item ${
+                getCurrentPage() === item.id ? "active" : ""
+              }`}
+              onClick={() => handleItemClick(item.path)}
             >
               <span className="nav-icon">{item.icon}</span>
               <span className="nav-label">{item.label}</span>
