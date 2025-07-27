@@ -8,11 +8,11 @@ import {
 import { useAuth } from "../hooks/useAuth";
 import Header from "../components/Layout/Header/Header";
 import Sidebar from "../components/Layout/Sidebar/Sidebar";
-import SearchPage from "../pages/SearchPage";
-import FavoritesPage from "../pages/FavoritesPage";
-import RankingsPage from "../pages/RankingsPage";
-import TopPlayersPage from "../pages/TopPlayersPage";
-import ComparePage from "../pages/ComparePage";
+import SearchPage from "../pages/SearchPage/SearchPage";
+import FavoritesPage from "../pages/FavoritesPage/FavoritesPage";
+import RankingsPage from "../pages/RankingsPage/RankingsPage";
+import TopPlayersPage from "../pages/TopPlayersPage/TopPlayersPage";
+import ComparePage from "../pages/ComparePage/ComparePage";
 
 const AppRoutes: React.FC = () => {
   const { user } = useAuth();
@@ -57,7 +57,10 @@ const AppRoutes: React.FC = () => {
         <main className="pt-16">
           <Routes>
             <Route path="/" element={<Navigate to="/search" replace />} />
-            <Route path="/search" element={<SearchPage />} />
+            <Route
+              path="/search"
+              element={<SearchPage onPlayerSelect={() => {}} />}
+            />
             <Route path="/favorites" element={<FavoritesPage />} />
             <Route path="/rankings" element={<RankingsPage />} />
             <Route path="/top-players" element={<TopPlayersPage />} />
