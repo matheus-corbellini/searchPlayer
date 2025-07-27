@@ -13,10 +13,13 @@ import FavoritesPage from "../pages/FavoritesPage/FavoritesPage";
 import RankingPage from "../pages/RankingPage/RankingPage";
 import TopPlayersPage from "../pages/TopPlayersPage/TopPlayersPage";
 import ComparePage from "../pages/ComparePage/ComparePage";
+import type { Player } from "../types/Player";
+import PlayerDetails from "../pages/PlayerDetails/PlayerDetails";
 
 const AppRoutes: React.FC = () => {
   const { user } = useAuth();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [selectedPlayerId, setSelectedPlayerId] = useState<number | null>(null);
 
   const handleMenuToggle = () => {
     setSidebarOpen(!sidebarOpen);
@@ -26,7 +29,14 @@ const AppRoutes: React.FC = () => {
     setSidebarOpen(false);
   };
 
-  // If user is not authenticated, show login page or redirect
+  const handlePlayerSelect = (player: Player) => {
+    setSelectedPlayerId(player.id);
+  };
+
+  const handleBackFromDetails = () => {
+    setSelectedPlayerId(null);
+  };
+
   if (!user) {
     return (
       <div className="min-h-screen bg-gray-100 flex items-center justify-center">
@@ -64,13 +74,31 @@ const AppRoutes: React.FC = () => {
             <Route path="/" element={<Navigate to="/search" replace />} />
             <Route
               path="/search"
-              element={<SearchPage onPlayerSelect={() => {}} />}
+              element={
+                selectedPlayerId ? (
+                  <PlayerDetails
+                    playerId={selectedPlayerId}
+                    onBack={handleBackFromDetails}
+                  />
+                ) : (
+                  <SearchPage onPlayerSelect={handlePlayerSelect} />
+                )
+              }
             />
             <Route path="/favorites" element={<FavoritesPage />} />
             <Route path="/rankings" element={<RankingPage />} />
             <Route
               path="/top-players"
-              element={<TopPlayersPage onPlayerSelect={() => {}} />}
+              element={
+                selectedPlayerId ? (
+                  <PlayerDetails
+                    playerId={selectedPlayerId}
+                    onBack={handleBackFromDetails}
+                  />
+                ) : (
+                  <TopPlayersPage onPlayerSelect={handlePlayerSelect} />
+                )
+              }
             />
             <Route path="/compare" element={<ComparePage />} />
             <Route path="*" element={<Navigate to="/search" replace />} />

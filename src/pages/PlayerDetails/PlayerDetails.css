@@ -154,6 +154,62 @@
   margin-bottom: 1rem;
 }
 
+/* Estilos para a seção do time no PlayerDetails */
+.player-team-info {
+  margin-bottom: 1rem;
+}
+
+.team-display {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  transition: all 0.3s ease;
+}
+
+.team-display:hover {
+  border-color: var(--primary-color);
+  background: var(--bg-tertiary);
+}
+
+.team-display .team-name {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.team-display .team-favorite-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: var(--radius-sm);
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.team-display .team-favorite-btn:hover {
+  color: var(--warning-color);
+  transform: scale(1.1);
+  background: rgba(245, 158, 11, 0.1);
+}
+
+.team-display .team-favorite-btn.active {
+  color: var(--warning-color);
+}
+
+.team-display .team-favorite-btn.active svg {
+  fill: var(--warning-color);
+  filter: drop-shadow(0 2px 4px rgba(245, 158, 11, 0.3));
+}
+
 .favorite-btn {
   position: absolute;
   top: 1rem;

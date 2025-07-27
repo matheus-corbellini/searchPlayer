@@ -48,10 +48,8 @@ class AuthService {
     }
   }
 
-  // Login user
   async login(email: string, password: string): Promise<User> {
     try {
-      // Sign in with Firebase Auth
       const userCredential = await signInWithEmailAndPassword(
         auth,
         email,
@@ -59,11 +57,9 @@ class AuthService {
       );
       const firebaseUser = userCredential.user;
 
-      // Get user data from Firestore
       let user = await firestoreService.getUserByUid(firebaseUser.uid);
 
       if (!user) {
-        // If user doesn't exist in Firestore, create it
         user = {
           uid: firebaseUser.uid,
           email: firebaseUser.email!,
@@ -81,7 +77,6 @@ class AuthService {
         await firestoreService.saveUser(user);
       }
 
-      // Store user in localStorage
       this.saveUserToStorage(user);
 
       return user;
@@ -91,7 +86,6 @@ class AuthService {
     }
   }
 
-  // Update user
   async updateUser(updates: Partial<User>): Promise<User> {
     const currentUser = this.getCurrentUser();
     if (!currentUser) {
@@ -99,10 +93,8 @@ class AuthService {
     }
 
     try {
-      // Update in Firestore
       await firestoreService.updateUser(currentUser.uid, updates);
 
-      // Update local user
       const updatedUser = { ...currentUser, ...updates };
       this.saveUserToStorage(updatedUser);
 
@@ -113,16 +105,12 @@ class AuthService {
     }
   }
 
-  // Logout
   async logout(): Promise<void> {
     try {
-      // Sign out from Firebase Auth
       await signOut(auth);
 
-      // Remove user from localStorage
       this.removeUserFromStorage();
 
-      // Limpar qualquer persistência do Firebase Auth
       this.clearAuthPersistence();
     } catch (error) {
       console.error("Logout error:", error);
@@ -130,7 +118,6 @@ class AuthService {
     }
   }
 
-  // Get current user from localStorage
   getCurrentUser(): User | null {
     const storedUser = localStorage.getItem(this.USER_STORAGE_KEY);
     if (storedUser) {
@@ -145,14 +132,11 @@ class AuthService {
     return null;
   }
 
-  // Check if user is authenticated
   isAuthenticated(): boolean {
     return this.getCurrentUser() !== null;
   }
 
-  // Método para limpar persistência de autenticação
   clearAuthPersistence(): void {
-    // Limpar localStorage
     this.removeUserFromStorage();
 
     // Limpar qualquer sessão persistente do Firebase

@@ -1,6 +1,6 @@
 export interface User {
-  id?: string; // Optional for new users, will be set to Firebase UID
-  uid: string; // Firebase UID
+  id?: string;
+  uid: string;
   email: string;
   name: string;
   favoriteTeams: number[];

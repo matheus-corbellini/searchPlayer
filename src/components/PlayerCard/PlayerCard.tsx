@@ -1,9 +1,10 @@
 "use client";
 
 import "./PlayerCard.css";
-import React from "react";
-import type { Player } from "../../types/Player";
+import React, { useEffect, useState } from "react";
+import type { Player, PlayerStatistics } from "../../types/Player";
 import { useFavorites } from "../../hooks/useFavorites";
+import { apiService } from "../../services";
 
 interface PlayerCardProps {
   player: Player;
@@ -16,11 +17,37 @@ const PlayerCard: React.FC<PlayerCardProps> = ({
   showFavorite = true,
   onClick,
 }) => {
-  const { isPlayerFavorite, toggleFavoritePlayer } = useFavorites();
+  const {
+    isPlayerFavorite,
+    isTeamFavorite,
+    toggleFavoritePlayer,
+    toggleFavoriteTeam,
+  } = useFavorites();
+  const [playerStats, setPlayerStats] = useState<PlayerStatistics | null>(null);
+
+  useEffect(() => {
+    const fetchPlayerStats = async () => {
+      try {
+        const stats = await apiService.getPlayerStatistics(player.id);
+        setPlayerStats(stats[0] || null);
+      } catch (error) {
+        console.error("Erro ao buscar estatísticas do jogador:", error);
+      }
+    };
+
+    fetchPlayerStats();
+  }, [player.id]);
 
   const handleFavoriteClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     toggleFavoritePlayer(player.id);
+  };
+
+  const handleTeamFavoriteClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (playerStats?.team) {
+      toggleFavoriteTeam(playerStats.team.id);
+    }
   };
 
   const handleCardClick = () => {
@@ -85,6 +112,29 @@ const PlayerCard: React.FC<PlayerCardProps> = ({
           <span>{player.height}</span>
           <span>{player.weight}</span>
         </div>
+
+        {playerStats?.team && (
+          <div className="player-team">
+            <span className="team-name">{playerStats.team.name}</span>
+            <button
+              className={`team-favorite-btn ${
+                isTeamFavorite(playerStats.team.id) ? "active" : ""
+              }`}
+              onClick={handleTeamFavoriteClick}
+            >
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"></polygon>
+              </svg>
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

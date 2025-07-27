@@ -1,4 +1,4 @@
-.player-card {
+.team-card {
   position: relative;
   background: linear-gradient(135deg, var(--bg-primary), var(--bg-secondary));
   border: 2px solid var(--border-color);
@@ -14,7 +14,7 @@
   justify-content: center;
 }
 
-.player-card::before {
+.team-card::before {
   content: "";
   position: absolute;
   top: 0;
@@ -30,17 +30,17 @@
   transition: transform 0.3s ease;
 }
 
-.player-card:hover {
+.team-card:hover {
   transform: translateY(-8px) scale(1.02);
   box-shadow: var(--shadow-xl);
   border-color: var(--primary-color);
 }
 
-.player-card:hover::before {
+.team-card:hover::before {
   transform: scaleX(1);
 }
 
-/* Botão de favorito melhorado */
+/* Botão de favorito */
 .favorite-btn {
   position: absolute;
   top: 1rem;
@@ -108,16 +108,6 @@
   opacity: 1;
 }
 
-@keyframes pulse {
-  0%,
-  100% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.05);
-  }
-}
-
 .favorite-btn.active svg {
   fill: currentColor;
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
@@ -131,14 +121,24 @@
   position: relative;
 }
 
-.player-photo {
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+.team-logo {
   position: relative;
   display: flex;
   justify-content: center;
   margin-bottom: 1.5rem;
 }
 
-.player-photo img {
+.team-logo img {
   width: 7rem;
   height: 7rem;
   border-radius: 50%;
@@ -148,7 +148,7 @@
   box-shadow: var(--shadow-md);
 }
 
-.player-photo-placeholder {
+.team-logo-placeholder {
   width: 7rem;
   height: 7rem;
   border-radius: 50%;
@@ -167,7 +167,7 @@
   overflow: hidden;
 }
 
-.player-photo-placeholder::before {
+.team-logo-placeholder::before {
   content: "";
   position: absolute;
   top: 0;
@@ -192,7 +192,7 @@
   }
 }
 
-.player-initial {
+.team-initial {
   font-size: 2.5rem;
   font-weight: bold;
   color: white;
@@ -201,32 +201,14 @@
   position: relative;
 }
 
-.player-card:hover .player-photo img,
-.player-card:hover .player-photo-placeholder {
+.team-card:hover .team-logo img,
+.team-card:hover .team-logo-placeholder {
   border-color: var(--primary-color);
   transform: scale(1.05);
   box-shadow: var(--shadow-lg);
 }
 
-.injury-badge {
-  position: absolute;
-  top: -0.5rem;
-  right: -0.5rem;
-  background: linear-gradient(135deg, var(--error-color), #dc2626);
-  color: white;
-  border-radius: 50%;
-  width: 2rem;
-  height: 2rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.875rem;
-  font-weight: bold;
-  box-shadow: var(--shadow-sm);
-  border: 2px solid white;
-}
-
-.player-info {
+.team-info {
   text-align: center;
   flex: 1;
   display: flex;
@@ -234,7 +216,7 @@
   justify-content: center;
 }
 
-.player-name {
+.team-name {
   font-size: 1.25rem;
   font-weight: 700;
   color: var(--text-primary);
@@ -245,7 +227,7 @@
   line-height: 1.3;
 }
 
-.player-details {
+.team-details {
   display: flex;
   justify-content: center;
   gap: 0.75rem;
@@ -256,103 +238,41 @@
   flex-wrap: wrap;
 }
 
-.player-details span:not(:last-child)::after {
+.team-details span:not(:last-child)::after {
   content: "•";
   margin-left: 0.75rem;
   color: var(--text-muted);
   font-weight: bold;
 }
 
-.player-physical {
-  display: flex;
-  justify-content: center;
-  gap: 0.75rem;
-  font-size: 0.875rem;
+.team-country {
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.team-founded {
   color: var(--text-muted);
   font-weight: 500;
-  flex-wrap: wrap;
-}
-
-.player-physical span:not(:last-child)::after {
-  content: "•";
-  margin-left: 0.75rem;
-  color: var(--text-muted);
-  font-weight: bold;
-}
-
-/* Estilos para a seção do time */
-.player-team {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: 0.75rem;
-  padding: 0.5rem 0.75rem;
-  background: var(--bg-secondary);
-  border-radius: var(--radius-md);
-  border: 1px solid var(--border-color);
-  transition: all 0.3s ease;
-}
-
-.player-team:hover {
-  border-color: var(--primary-color);
-  background: var(--bg-tertiary);
-}
-
-.team-name {
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--text-primary);
-  flex: 1;
-  text-align: left;
-}
-
-.team-favorite-btn {
-  background: transparent;
-  border: none;
-  color: var(--text-secondary);
-  cursor: pointer;
-  padding: 0.25rem;
-  border-radius: var(--radius-sm);
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-left: 0.5rem;
-}
-
-.team-favorite-btn:hover {
-  color: var(--warning-color);
-  transform: scale(1.1);
-  background: rgba(245, 158, 11, 0.1);
-}
-
-.team-favorite-btn.active {
-  color: var(--warning-color);
-}
-
-.team-favorite-btn.active svg {
-  fill: var(--warning-color);
-  filter: drop-shadow(0 2px 4px rgba(245, 158, 11, 0.3));
 }
 
 /* Responsividade */
 @media (max-width: 1024px) {
-  .player-card {
+  .team-card {
     padding: 1.75rem 1.25rem;
     min-height: 260px;
   }
 
-  .player-photo img,
-  .player-photo-placeholder {
+  .team-logo img,
+  .team-logo-placeholder {
     width: 6.5rem;
     height: 6.5rem;
   }
 
-  .player-initial {
+  .team-initial {
     font-size: 2.25rem;
   }
 
-  .player-name {
+  .team-name {
     font-size: 1.2rem;
   }
 
@@ -368,7 +288,7 @@
 }
 
 @media (max-width: 768px) {
-  .player-card {
+  .team-card {
     padding: 1.5rem 1rem;
     min-height: 240px;
   }
@@ -385,35 +305,33 @@
     height: 1.125rem;
   }
 
-  .player-photo img,
-  .player-photo-placeholder {
+  .team-logo img,
+  .team-logo-placeholder {
     width: 6rem;
     height: 6rem;
   }
 
-  .player-initial {
+  .team-initial {
     font-size: 2rem;
   }
 
-  .player-name {
+  .team-name {
     font-size: 1.1rem;
     margin-bottom: 0.5rem;
   }
 
-  .player-details,
-  .player-physical {
+  .team-details {
     font-size: 0.875rem;
     gap: 0.5rem;
   }
 
-  .player-details span:not(:last-child)::after,
-  .player-physical span:not(:last-child)::after {
+  .team-details span:not(:last-child)::after {
     margin-left: 0.5rem;
   }
 }
 
 @media (max-width: 480px) {
-  .player-card {
+  .team-card {
     padding: 1.25rem 0.75rem;
     min-height: 220px;
   }
@@ -428,28 +346,27 @@
     height: 1rem;
   }
 
-  .player-photo img,
-  .player-photo-placeholder {
+  .team-logo img,
+  .team-logo-placeholder {
     width: 5.5rem;
     height: 5.5rem;
   }
 
-  .player-initial {
+  .team-initial {
     font-size: 1.75rem;
   }
 
-  .player-name {
+  .team-name {
     font-size: 1rem;
   }
 
-  .player-details,
-  .player-physical {
+  .team-details {
     font-size: 0.8rem;
   }
 }
 
 /* Melhorias para tema escuro */
-[data-theme="dark"] .player-card {
+[data-theme="dark"] .team-card {
   background: linear-gradient(135deg, var(--bg-secondary), var(--bg-tertiary));
   border-color: var(--border-color);
 }

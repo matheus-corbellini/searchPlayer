@@ -6,19 +6,21 @@ import { useFavorites } from "../../hooks/useFavorites";
 import { useAuth } from "../../hooks/useAuth";
 import { apiService } from "../../services/api";
 import PlayerCard from "../../components/PlayerCard/PlayerCard";
-import type { Player } from "../../types/Player";
+import TeamCard from "../../components/TeamCard/TeamCard";
+import type { Player, Team } from "../../types/Player";
 
 const FavoritesPage: React.FC = () => {
   const { user } = useAuth();
   const { favoritePlayers, favoriteTeams } = useFavorites();
   const [players, setPlayers] = useState<Player[]>([]);
+  const [teams, setTeams] = useState<Team[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const loadFavoritePlayers = async () => {
-      if (favoritePlayers.length > 0) {
-        try {
-          // Load player details for favorite player IDs
+    const loadFavorites = async () => {
+      try {
+        // Load player details for favorite player IDs
+        if (favoritePlayers.length > 0) {
           const playerPromises = favoritePlayers.map((id) =>
             apiService.getPlayer(id)
           );
@@ -27,17 +29,29 @@ const FavoritesPage: React.FC = () => {
             (player) => player !== null
           ) as Player[];
           setPlayers(validPlayers);
-        } catch (error) {
-          console.error("Error loading favorite players:", error);
+        } else {
+          setPlayers([]);
         }
-      } else {
-        setPlayers([]);
+
+        // Load team details for favorite team IDs
+        if (favoriteTeams.length > 0) {
+          const allTeams = await apiService.getAllTeams();
+          const favoriteTeamObjects = allTeams.filter((team) =>
+            favoriteTeams.includes(team.id)
+          );
+          setTeams(favoriteTeamObjects);
+        } else {
+          setTeams([]);
+        }
+      } catch (error) {
+        console.error("Error loading favorites:", error);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     };
 
-    loadFavoritePlayers();
-  }, [favoritePlayers]);
+    loadFavorites();
+  }, [favoritePlayers, favoriteTeams]);
 
   if (!user) {
     return (
@@ -84,12 +98,11 @@ const FavoritesPage: React.FC = () => {
 
       <div>
         <h2 className="text-2xl font-semibold mb-4">Times Favoritos</h2>
-        {favoriteTeams.length > 0 ? (
+        {teams.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {/* TODO: Implement team cards */}
-            <div className="text-center text-gray-600 py-8">
-              <p>Funcionalidade de times favoritos em desenvolvimento</p>
-            </div>
+            {teams.map((team) => (
+              <TeamCard key={team.id} team={team} showFavorite={true} />
+            ))}
           </div>
         ) : (
           <div className="text-center text-gray-600 py-8">

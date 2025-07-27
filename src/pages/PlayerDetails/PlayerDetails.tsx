@@ -20,7 +20,12 @@ const PlayerDetailsPage: React.FC<PlayerDetailsPageProps> = ({
   const [statistics, setStatistics] = useState<PlayerStatistics[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("overview");
-  const { isPlayerFavorite, toggleFavoritePlayer } = useFavorites();
+  const {
+    isPlayerFavorite,
+    isTeamFavorite,
+    toggleFavoritePlayer,
+    toggleFavoriteTeam,
+  } = useFavorites();
 
   useEffect(() => {
     const loadPlayerData = async () => {
@@ -120,6 +125,36 @@ const PlayerDetailsPage: React.FC<PlayerDetailsPageProps> = ({
             <p className="player-position text-muted">
               {currentStats?.games.position || "Atacante"}
             </p>
+
+            {currentStats?.team && (
+              <div className="player-team-info mt-3">
+                <div className="team-display">
+                  <span className="team-name">{currentStats.team.name}</span>
+                  <button
+                    className={`team-favorite-btn ${
+                      isTeamFavorite(currentStats.team.id) ? "active" : ""
+                    }`}
+                    onClick={() => toggleFavoriteTeam(currentStats.team.id)}
+                    title={
+                      isTeamFavorite(currentStats.team.id)
+                        ? "Remover time dos Favoritos"
+                        : "Adicionar time aos Favoritos"
+                    }
+                  >
+                    <svg
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                    >
+                      <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"></polygon>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            )}
 
             <div className="player-actions mt-4">
               <button
