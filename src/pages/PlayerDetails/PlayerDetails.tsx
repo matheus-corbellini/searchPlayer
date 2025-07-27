@@ -2,17 +2,17 @@
 
 import type React from "react";
 import { useState, useEffect } from "react";
-import type { Player, PlayerStatistics } from "../types";
-import { apiService } from "../services/api";
-import { useFavorites } from "../hooks/useFavorites";
-import "./PlayerDetailPage.css";
+import type { Player, PlayerStatistics } from "../../types/Player";
+import { apiService } from "../../services/api";
+import { useFavorites } from "../../hooks/useFavorites";
+import "./PlayerDetails.css";
 
-interface PlayerDetailPageProps {
+interface PlayerDetailsPageProps {
   playerId: number;
   onBack: () => void;
 }
 
-const PlayerDetailPage: React.FC<PlayerDetailPageProps> = ({
+const PlayerDetailsPage: React.FC<PlayerDetailsPageProps> = ({
   playerId,
   onBack,
 }) => {
@@ -20,7 +20,7 @@ const PlayerDetailPage: React.FC<PlayerDetailPageProps> = ({
   const [statistics, setStatistics] = useState<PlayerStatistics[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("overview");
-  const { isPlayerFavorite, togglePlayerFavorite } = useFavorites();
+  const { isPlayerFavorite, toggleFavoritePlayer } = useFavorites();
 
   useEffect(() => {
     const loadPlayerData = async () => {
@@ -47,7 +47,8 @@ const PlayerDetailPage: React.FC<PlayerDetailPageProps> = ({
     return (
       <div className="player-detail-page">
         <div className="player-detail-loading">
-          <div className="loading-spinner player-detail-spinner"></div>
+          <div className="loading-spinner" />
+          <p>Carregando dados do jogador...</p>
         </div>
       </div>
     );
@@ -90,307 +91,270 @@ const PlayerDetailPage: React.FC<PlayerDetailPageProps> = ({
         <div className="player-profile-card card">
           <div className="card-body text-center">
             <div className="player-photo-container">
-              <img
-                src={player.photo || "/placeholder.svg"}
-                alt={player.name}
-                className="player-photo"
-                onError={(e) => {
-                  (e.target as HTMLImageElement).src =
-                    "/placeholder.svg?height=128&width=128";
-                }}
-              />
-              {player.injured && <div className="injury-indicator">⚠️</div>}
+              <div className="player-photo-placeholder">
+                <span className="player-photo-initial">
+                  {player.name.charAt(0).toUpperCase()}
+                </span>
+              </div>
+              {player.injured && (
+                <div className="injury-badge">
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  >
+                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                    <line x1="12" y1="9" x2="12" y2="13"></line>
+                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                  </svg>
+                </div>
+              )}
             </div>
 
-            <h1 className="player-name text-2xl font-bold mb-2">
+            <h1 className="player-name text-2xl font-bold mt-4">
               {player.name}
             </h1>
-            <p className="player-full-name text-muted mb-4">
-              {player.firstname} {player.lastname}
+            <p className="player-position text-muted">
+              {currentStats?.games.position || "Atacante"}
             </p>
 
-            <button
-              className={`favorite-button btn ${
-                isPlayerFavorite(player.id) ? "btn-primary" : "btn-secondary"
-              } mb-4`}
-              onClick={() => togglePlayerFavorite(player.id)}
-            >
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
+            <div className="player-actions mt-4">
+              <button
+                className={`favorite-btn ${
+                  isPlayerFavorite(player.id) ? "active" : ""
+                }`}
+                onClick={() => toggleFavoritePlayer(player.id)}
+                title={
+                  isPlayerFavorite(player.id)
+                    ? "Remover dos Favoritos"
+                    : "Adicionar aos Favoritos"
+                }
               >
-                <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"></polygon>
-              </svg>
-              {isPlayerFavorite(player.id)
-                ? "Remover dos Favoritos"
-                : "Adicionar aos Favoritos"}
-            </button>
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                >
+                  <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"></polygon>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
 
-            <div className="player-basic-info grid grid-cols-2 gap-4 text-sm">
+        <div className="player-info-card card">
+          <div className="card-header">
+            <h2 className="card-title">Informações Pessoais</h2>
+          </div>
+          <div className="card-body">
+            <div className="info-grid">
               <div className="info-item">
-                <div className="info-label font-semibold">Idade</div>
-                <div className="info-value text-muted">{player.age} anos</div>
+                <span className="info-label">Idade</span>
+                <span className="info-value">{player.age} anos</span>
               </div>
               <div className="info-item">
-                <div className="info-label font-semibold">Nacionalidade</div>
-                <div className="info-value text-muted">
-                  {player.nationality}
-                </div>
+                <span className="info-label">Nacionalidade</span>
+                <span className="info-value">{player.nationality}</span>
               </div>
               <div className="info-item">
-                <div className="info-label font-semibold">Altura</div>
-                <div className="info-value text-muted">{player.height}</div>
+                <span className="info-label">Altura</span>
+                <span className="info-value">{player.height}</span>
               </div>
               <div className="info-item">
-                <div className="info-label font-semibold">Peso</div>
-                <div className="info-value text-muted">{player.weight}</div>
+                <span className="info-label">Peso</span>
+                <span className="info-value">{player.weight}</span>
+              </div>
+              <div className="info-item">
+                <span className="info-label">Data de Nascimento</span>
+                <span className="info-value">
+                  {new Date(player.birth.date).toLocaleDateString("pt-BR")}
+                </span>
+              </div>
+              <div className="info-item">
+                <span className="info-label">Local de Nascimento</span>
+                <span className="info-value">{player.birth.place}</span>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="player-details-section">
-          <div className="player-details-card card">
-            <div className="card-header">
-              <div className="tabs-container flex gap-4">
-                {["overview", "statistics", "career"].map((tab) => (
-                  <button
-                    key={tab}
-                    className={`tab-button btn ${
-                      activeTab === tab ? "btn-primary" : "btn-ghost"
-                    }`}
-                    onClick={() => setActiveTab(tab)}
-                  >
-                    {tab === "overview" && "Visão Geral"}
-                    {tab === "statistics" && "Estatísticas"}
-                    {tab === "career" && "Carreira"}
-                  </button>
-                ))}
+        <div className="player-stats-card card">
+          <div className="card-header">
+            <h2 className="card-title">Estatísticas da Temporada</h2>
+          </div>
+          <div className="card-body">
+            {currentStats ? (
+              <div className="stats-grid">
+                <div className="stat-item">
+                  <span className="stat-label">Jogos</span>
+                  <span className="stat-value">
+                    {currentStats.games.appearences}
+                  </span>
+                </div>
+                <div className="stat-item">
+                  <span className="stat-label">Gols</span>
+                  <span className="stat-value">{currentStats.goals.total}</span>
+                </div>
+                <div className="stat-item">
+                  <span className="stat-label">Assistências</span>
+                  <span className="stat-value">
+                    {currentStats.goals.assists}
+                  </span>
+                </div>
+                <div className="stat-item">
+                  <span className="stat-label">Avaliação</span>
+                  <span className="stat-value">
+                    {currentStats.games.rating}
+                  </span>
+                </div>
+                <div className="stat-item">
+                  <span className="stat-label">Minutos</span>
+                  <span className="stat-value">
+                    {currentStats.games.minutes}
+                  </span>
+                </div>
+                <div className="stat-item">
+                  <span className="stat-label">Cartões Amarelos</span>
+                  <span className="stat-value">
+                    {currentStats.cards.yellow}
+                  </span>
+                </div>
               </div>
-            </div>
-
-            <div className="card-body">
-              {activeTab === "overview" && (
-                <div className="overview-tab">
-                  <h3 className="section-title text-xl font-semibold mb-4">
-                    Informações Pessoais
-                  </h3>
-                  <div className="personal-info grid grid-cols-2 gap-4">
-                    <div className="info-item">
-                      <div className="info-label font-semibold">
-                        Data de Nascimento
-                      </div>
-                      <div className="info-value text-muted">
-                        {new Date(player.birth.date).toLocaleDateString(
-                          "pt-BR"
-                        )}
-                      </div>
-                    </div>
-                    <div className="info-item">
-                      <div className="info-label font-semibold">
-                        Local de Nascimento
-                      </div>
-                      <div className="info-value text-muted">
-                        {player.birth.place}, {player.birth.country}
-                      </div>
-                    </div>
-                  </div>
-
-                  {currentStats && (
-                    <div className="current-season">
-                      <h3 className="section-title text-xl font-semibold mb-4 mt-6">
-                        Temporada Atual
-                      </h3>
-                      <div className="stats-cards grid grid-cols-3 gap-4">
-                        <div className="stat-card card">
-                          <div className="card-body text-center">
-                            <div className="stat-value text-2xl font-bold text-primary">
-                              {currentStats.games.appearences}
-                            </div>
-                            <div className="stat-label text-sm text-muted">
-                              Jogos
-                            </div>
-                          </div>
-                        </div>
-                        <div className="stat-card card">
-                          <div className="card-body text-center">
-                            <div className="stat-value text-2xl font-bold text-success">
-                              {currentStats.goals.total}
-                            </div>
-                            <div className="stat-label text-sm text-muted">
-                              Gols
-                            </div>
-                          </div>
-                        </div>
-                        <div className="stat-card card">
-                          <div className="card-body text-center">
-                            <div className="stat-value text-2xl font-bold text-warning">
-                              {currentStats.goals.assists}
-                            </div>
-                            <div className="stat-label text-sm text-muted">
-                              Assistências
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              )}
-
-              {activeTab === "statistics" && currentStats && (
-                <div className="statistics-tab">
-                  <h3 className="section-title text-xl font-semibold mb-4">
-                    Estatísticas Detalhadas
-                  </h3>
-
-                  <div className="stats-sections grid grid-cols-2 gap-6">
-                    <div className="stats-section">
-                      <h4 className="stats-section-title font-semibold mb-3">
-                        Desempenho
-                      </h4>
-                      <div className="stats-list">
-                        <div className="stat-row flex justify-between">
-                          <span>Jogos disputados:</span>
-                          <span className="font-medium">
-                            {currentStats.games.appearences}
-                          </span>
-                        </div>
-                        <div className="stat-row flex justify-between">
-                          <span>Minutos jogados:</span>
-                          <span className="font-medium">
-                            {currentStats.games.minutes}
-                          </span>
-                        </div>
-                        <div className="stat-row flex justify-between">
-                          <span>Nota média:</span>
-                          <span className="font-medium">
-                            {currentStats.games.rating}
-                          </span>
-                        </div>
-                        <div className="stat-row flex justify-between">
-                          <span>Posição:</span>
-                          <span className="font-medium">
-                            {currentStats.games.position}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="stats-section">
-                      <h4 className="stats-section-title font-semibold mb-3">
-                        Gols e Assistências
-                      </h4>
-                      <div className="stats-list">
-                        <div className="stat-row flex justify-between">
-                          <span>Gols marcados:</span>
-                          <span className="font-medium">
-                            {currentStats.goals.total}
-                          </span>
-                        </div>
-                        <div className="stat-row flex justify-between">
-                          <span>Assistências:</span>
-                          <span className="font-medium">
-                            {currentStats.goals.assists}
-                          </span>
-                        </div>
-                        <div className="stat-row flex justify-between">
-                          <span>Chutes totais:</span>
-                          <span className="font-medium">
-                            {currentStats.shots.total}
-                          </span>
-                        </div>
-                        <div className="stat-row flex justify-between">
-                          <span>Chutes no gol:</span>
-                          <span className="font-medium">
-                            {currentStats.shots.on}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="stats-section">
-                      <h4 className="stats-section-title font-semibold mb-3">
-                        Passes
-                      </h4>
-                      <div className="stats-list">
-                        <div className="stat-row flex justify-between">
-                          <span>Passes totais:</span>
-                          <span className="font-medium">
-                            {currentStats.passes.total}
-                          </span>
-                        </div>
-                        <div className="stat-row flex justify-between">
-                          <span>Passes decisivos:</span>
-                          <span className="font-medium">
-                            {currentStats.passes.key}
-                          </span>
-                        </div>
-                        <div className="stat-row flex justify-between">
-                          <span>Precisão:</span>
-                          <span className="font-medium">
-                            {currentStats.passes.accuracy}%
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="stats-section">
-                      <h4 className="stats-section-title font-semibold mb-3">
-                        Disciplina
-                      </h4>
-                      <div className="stats-list">
-                        <div className="stat-row flex justify-between">
-                          <span>Cartões amarelos:</span>
-                          <span className="font-medium">
-                            {currentStats.cards.yellow}
-                          </span>
-                        </div>
-                        <div className="stat-row flex justify-between">
-                          <span>Cartões vermelhos:</span>
-                          <span className="font-medium">
-                            {currentStats.cards.red}
-                          </span>
-                        </div>
-                        <div className="stat-row flex justify-between">
-                          <span>Faltas cometidas:</span>
-                          <span className="font-medium">
-                            {currentStats.fouls.committed}
-                          </span>
-                        </div>
-                        <div className="stat-row flex justify-between">
-                          <span>Faltas sofridas:</span>
-                          <span className="font-medium">
-                            {currentStats.fouls.drawn}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {activeTab === "career" && (
-                <div className="career-tab">
-                  <h3 className="section-title text-xl font-semibold mb-4">
-                    Histórico da Carreira
-                  </h3>
-                  <p className="text-muted">
-                    Informações detalhadas sobre a carreira em
-                    desenvolvimento...
-                  </p>
-                </div>
-              )}
-            </div>
+            ) : (
+              <p className="text-muted">Estatísticas não disponíveis</p>
+            )}
           </div>
         </div>
       </div>
+
+      {currentStats && (
+        <div className="player-detailed-stats mt-6">
+          <div className="stats-tabs">
+            <button
+              className={`stats-tab ${
+                activeTab === "overview" ? "active" : ""
+              }`}
+              onClick={() => setActiveTab("overview")}
+            >
+              Visão Geral
+            </button>
+            <button
+              className={`stats-tab ${
+                activeTab === "attacking" ? "active" : ""
+              }`}
+              onClick={() => setActiveTab("attacking")}
+            >
+              Ataque
+            </button>
+            <button
+              className={`stats-tab ${
+                activeTab === "defending" ? "active" : ""
+              }`}
+              onClick={() => setActiveTab("defending")}
+            >
+              Defesa
+            </button>
+          </div>
+
+          <div className="stats-content">
+            {activeTab === "overview" && (
+              <div className="stats-section">
+                <h3>Visão Geral</h3>
+                <div className="stats-grid-detailed">
+                  <div className="stat-card">
+                    <span className="stat-number">
+                      {currentStats.games.appearences}
+                    </span>
+                    <span className="stat-label">Jogos</span>
+                  </div>
+                  <div className="stat-card">
+                    <span className="stat-number">
+                      {currentStats.games.minutes}
+                    </span>
+                    <span className="stat-label">Minutos</span>
+                  </div>
+                  <div className="stat-card">
+                    <span className="stat-number">
+                      {currentStats.games.rating}
+                    </span>
+                    <span className="stat-label">Avaliação</span>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {activeTab === "attacking" && (
+              <div className="stats-section">
+                <h3>Estatísticas de Ataque</h3>
+                <div className="stats-grid-detailed">
+                  <div className="stat-card">
+                    <span className="stat-number">
+                      {currentStats.goals.total}
+                    </span>
+                    <span className="stat-label">Gols</span>
+                  </div>
+                  <div className="stat-card">
+                    <span className="stat-number">
+                      {currentStats.goals.assists}
+                    </span>
+                    <span className="stat-label">Assistências</span>
+                  </div>
+                  <div className="stat-card">
+                    <span className="stat-number">
+                      {currentStats.shots.total}
+                    </span>
+                    <span className="stat-label">Finalizações</span>
+                  </div>
+                  <div className="stat-card">
+                    <span className="stat-number">{currentStats.shots.on}</span>
+                    <span className="stat-label">No Gol</span>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {activeTab === "defending" && (
+              <div className="stats-section">
+                <h3>Estatísticas de Defesa</h3>
+                <div className="stats-grid-detailed">
+                  <div className="stat-card">
+                    <span className="stat-number">
+                      {currentStats.tackles.total}
+                    </span>
+                    <span className="stat-label">Desarmes</span>
+                  </div>
+                  <div className="stat-card">
+                    <span className="stat-number">
+                      {currentStats.tackles.interceptions}
+                    </span>
+                    <span className="stat-label">Interceptações</span>
+                  </div>
+                  <div className="stat-card">
+                    <span className="stat-number">
+                      {currentStats.tackles.blocks}
+                    </span>
+                    <span className="stat-label">Bloqueios</span>
+                  </div>
+                  <div className="stat-card">
+                    <span className="stat-number">
+                      {currentStats.cards.yellow}
+                    </span>
+                    <span className="stat-label">Cartões Amarelos</span>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
 
-export default PlayerDetailPage;
+export default PlayerDetailsPage;

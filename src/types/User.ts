@@ -1,5 +1,6 @@
 export interface User {
-  id: string;
+  id?: string; // Optional for new users, will be set to Firebase UID
+  uid: string; // Firebase UID
   email: string;
   name: string;
   favoriteTeams: number[];
@@ -8,4 +9,6 @@ export interface User {
     theme: "light" | "dark";
     language: string;
   };
+  createdAt?: Date;
+  updatedAt?: Date;
 }

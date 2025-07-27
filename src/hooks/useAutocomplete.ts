@@ -9,6 +9,24 @@ export const useAutocomplete = (delay = 300) => {
   const [suggestions, setSuggestions] = useState<Player[]>([]);
   const [loading, setLoading] = useState(false);
 
+  const searchPlayers = useCallback(async (searchQuery: string) => {
+    if (searchQuery.length < 2) {
+      setSuggestions([]);
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const results = await apiService.getPlayerSuggestions(searchQuery);
+      setSuggestions(results);
+    } catch (error) {
+      console.error("Error fetching player suggestions:", error);
+      setSuggestions([]);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
   const debouncedSearch = useCallback(async (searchQuery: string) => {
     if (searchQuery.length < 2) {
       setSuggestions([]);
@@ -40,6 +58,7 @@ export const useAutocomplete = (delay = 300) => {
     setQuery,
     suggestions,
     loading,
+    searchPlayers,
     clearSuggestions: () => setSuggestions([]),
   };
 };

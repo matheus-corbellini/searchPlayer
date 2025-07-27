@@ -2,10 +2,11 @@
 
 import type React from "react";
 import { useState } from "react";
-import { useSearch } from "../hooks/useSearch";
-import type { Player, SearchFilters } from "../types";
-import SearchBar from "../components/SearchBar/SearchBar";
-import PlayerCard from "../components/PlayerCard/PlayerCard";
+import { useSearch } from "../../hooks/useSearch";
+import type { Player } from "../../types/Player";
+import type { SearchFilters } from "../../types/SearchFilters";
+import SearchBar from "../../components/SearchBar/SearchBar";
+import PlayerCard from "../../components/PlayerCard/PlayerCard";
 import "./SearchPage.css";
 
 interface SearchPageProps {

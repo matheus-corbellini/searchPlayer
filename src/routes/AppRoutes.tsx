@@ -10,7 +10,7 @@ import Header from "../components/Layout/Header/Header";
 import Sidebar from "../components/Layout/Sidebar/Sidebar";
 import SearchPage from "../pages/SearchPage/SearchPage";
 import FavoritesPage from "../pages/FavoritesPage/FavoritesPage";
-import RankingsPage from "../pages/RankingsPage/RankingsPage";
+import RankingPage from "../pages/RankingPage/RankingPage";
 import TopPlayersPage from "../pages/TopPlayersPage/TopPlayersPage";
 import ComparePage from "../pages/ComparePage/ComparePage";
 
@@ -52,7 +52,12 @@ const AppRoutes: React.FC = () => {
       <div className="min-h-screen bg-gray-100">
         <Header onMenuToggle={handleMenuToggle} />
 
-        <Sidebar isOpen={sidebarOpen} onClose={handleSidebarClose} />
+        <Sidebar
+          onNavigate={() => {}}
+          currentPage={""}
+          isOpen={sidebarOpen}
+          onClose={handleSidebarClose}
+        />
 
         <main className="pt-16">
           <Routes>
@@ -62,8 +67,11 @@ const AppRoutes: React.FC = () => {
               element={<SearchPage onPlayerSelect={() => {}} />}
             />
             <Route path="/favorites" element={<FavoritesPage />} />
-            <Route path="/rankings" element={<RankingsPage />} />
-            <Route path="/top-players" element={<TopPlayersPage />} />
+            <Route path="/rankings" element={<RankingPage />} />
+            <Route
+              path="/top-players"
+              element={<TopPlayersPage onPlayerSelect={() => {}} />}
+            />
             <Route path="/compare" element={<ComparePage />} />
             <Route path="*" element={<Navigate to="/search" replace />} />
           </Routes>

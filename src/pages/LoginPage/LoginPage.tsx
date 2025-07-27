@@ -27,9 +27,13 @@ const LoginPage: React.FC<LoginPageProps> = ({ onNavigate }) => {
       let success = false;
 
       if (isLogin) {
-        success = await login(formData.email);
+        success = await login(formData.email, formData.password);
       } else {
-        success = await register(formData.email, formData.name);
+        success = await register(
+          formData.email,
+          formData.password,
+          formData.name
+        );
       }
 
       if (success) {
@@ -37,7 +41,8 @@ const LoginPage: React.FC<LoginPageProps> = ({ onNavigate }) => {
       } else {
         setError("Credenciais inválidas");
       }
-    } catch {
+    } catch (error) {
+      console.error("Auth error:", error);
       setError("Erro ao fazer login/registro");
     }
   };

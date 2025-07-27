@@ -1,10 +1,10 @@
 "use client";
 
-import "./SearchBar.css";
-import React from "react";
-import { useState, useEffect, useRef } from "react";
-import { useAutocomplete } from "../../hooks/useAutocomplete";
+import type React from "react";
+import { useState, useRef, useEffect } from "react";
 import type { Player } from "../../types/Player";
+import { useAutocomplete } from "../../hooks/useAutocomplete";
+import "./SearchBar.css";
 
 interface SearchBarProps {
   onSearch: (query: string) => void;
@@ -17,23 +17,29 @@ const SearchBar: React.FC<SearchBarProps> = ({
   onPlayerSelect,
   placeholder = "Pesquisar jogador...",
 }) => {
+  const [query, setQuery] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
-  const { query, setQuery, suggestions, loading } = useAutocomplete();
-  const searchRef = useRef<HTMLInputElement>(null);
+  const searchRef = useRef<HTMLDivElement>(null);
+  const { suggestions, loading, searchPlayers } = useAutocomplete();
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (
-        searchRef.current &&
-        !searchRef.current.contains(event.target as Node)
-      ) {
+      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
         setShowSuggestions(false);
       }
     };
 
     document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
   }, []);
+
+  useEffect(() => {
+    if (query.length > 1) {
+      searchPlayers(query);
+    }
+  }, [query, searchPlayers]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -109,15 +115,11 @@ const SearchBar: React.FC<SearchBarProps> = ({
                 className="suggestion-item"
                 onClick={() => handleSuggestionClick(player)}
               >
-                <img
-                  src={player.photo || "/placeholder.svg"}
-                  alt={player.name}
-                  className="suggestion-avatar"
-                  onError={(e) => {
-                    (e.target as HTMLImageElement).src =
-                      "/placeholder.svg?height=40&width=40";
-                  }}
-                />
+                <div className="suggestion-avatar-placeholder">
+                  <span className="suggestion-avatar-initial">
+                    {player.name.charAt(0).toUpperCase()}
+                  </span>
+                </div>
                 <div className="suggestion-info">
                   <div className="suggestion-name">{player.name}</div>
                   <div className="suggestion-details">

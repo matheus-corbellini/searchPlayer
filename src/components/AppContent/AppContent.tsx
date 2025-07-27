@@ -9,7 +9,7 @@ import LoginPage from "../../pages/LoginPage/LoginPage";
 import SearchPage from "../../pages/SearchPage/SearchPage";
 import PlayerDetailPage from "../../pages/PlayerDetails/PlayerDetails";
 import FavoritesPage from "../../pages/FavoritesPage/FavoritesPage";
-import RankingsPage from "../../pages/RankingsPage/RankingsPage";
+import RankingsPage from "../../pages/RankingPage/RankingPage";
 import TopPlayersPage from "../../pages/TopPlayersPage/TopPlayersPage";
 import ComparePage from "../../pages/ComparePage/ComparePage";
 import type { Player } from "../../types/Player";
@@ -41,7 +41,12 @@ const AppContent: React.FC = () => {
 
   return (
     <div className="app-container">
-      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <Sidebar
+        isOpen={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
+        onNavigate={handleNavigate}
+        currentPage={currentPage}
+      />
 
       <div className="app-main">
         <Header onMenuToggle={() => setSidebarOpen(true)} />
@@ -62,7 +67,9 @@ const AppContent: React.FC = () => {
 
           {currentPage === "rankings" && <RankingsPage />}
 
-          {currentPage === "top-players" && <TopPlayersPage />}
+          {currentPage === "top-players" && (
+            <TopPlayersPage onPlayerSelect={() => {}} />
+          )}
 
           {currentPage === "compare" && <ComparePage />}
         </main>

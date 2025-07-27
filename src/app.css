@@ -1,0 +1,135 @@
+.app-container {
+  display: flex;
+  min-height: 100vh;
+  background-color: var(--bg-primary);
+}
+
+.app-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  transition: margin-left 0.3s ease;
+}
+
+.main-content {
+  flex: 1;
+  margin-top: var(--header-height);
+  padding-top: 0;
+  min-height: calc(100vh - var(--header-height));
+  display: flex;
+  flex-direction: column;
+}
+
+/* Centralizar conteúdo quando sidebar está visível */
+.main-content .container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.page-placeholder {
+  padding-top: 2rem;
+  max-width: 800px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.page-placeholder .card {
+  background: linear-gradient(135deg, var(--bg-secondary), var(--bg-tertiary));
+  border: 2px dashed var(--border-color);
+  min-height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.page-placeholder .card-body {
+  padding: 3rem;
+}
+
+.page-placeholder .card-body p {
+  font-size: 1.125rem;
+  font-weight: 500;
+}
+
+/* Desktop: sidebar sempre visível */
+@media (min-width: 769px) {
+  .app-main {
+    margin-left: var(--sidebar-width);
+  }
+
+  .main-content .container {
+    padding: 0 2rem;
+  }
+}
+
+/* Mobile: sidebar oculto */
+@media (max-width: 768px) {
+  .app-main {
+    margin-left: 0;
+  }
+
+  .main-content {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .main-content .container {
+    padding: 0;
+  }
+
+  .page-placeholder {
+    padding-top: 1rem;
+  }
+
+  .page-placeholder .card-body {
+    padding: 2rem 1rem;
+  }
+}
+
+/* Smooth transitions for theme changes */
+.app-container,
+.app-main,
+.main-content {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Loading states */
+.app-container.loading {
+  pointer-events: none;
+}
+
+.app-container.loading::after {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.1);
+  z-index: 9999;
+}
+
+/* Focus management */
+.app-container:focus-within .main-content {
+  outline: none;
+}
+
+/* Print styles */
+@media print {
+  .app-container {
+    display: block;
+  }
+
+  .app-main {
+    margin-left: 0;
+  }
+
+  .main-content {
+    margin-top: 0;
+  }
+}

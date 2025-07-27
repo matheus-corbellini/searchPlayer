@@ -52,14 +52,11 @@ const PlayerCard: React.FC<PlayerCardProps> = ({
       )}
 
       <div className="player-photo">
-        <img
-          src={player.photo || "/placeholder.svg"}
-          alt={player.name}
-          onError={(e) => {
-            (e.target as HTMLImageElement).src =
-              "/placeholder.svg?height=120&width=120";
-          }}
-        />
+        <div className="player-photo-placeholder">
+          <span className="player-initial">
+            {player.name.charAt(0).toUpperCase()}
+          </span>
+        </div>
         {player.injured && (
           <div className="injury-badge">
             <svg

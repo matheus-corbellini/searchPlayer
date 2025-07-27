@@ -15,18 +15,20 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Check for stored user session
-    const currentUser = authService.getCurrentUser();
-    if (currentUser) {
-      setUser(currentUser);
-    }
-    setIsLoading(false);
+    // Set up auth state listener
+    const unsubscribe = authService.onAuthStateChanged((user) => {
+      setUser(user);
+      setIsLoading(false);
+    });
+
+    // Cleanup listener on unmount
+    return () => unsubscribe();
   }, []);
 
-  const login = async (email: string): Promise<boolean> => {
+  const login = async (email: string, password: string): Promise<boolean> => {
     setIsLoading(true);
     try {
-      const user = await authService.login(email);
+      const user = await authService.login(email, password);
       setUser(user);
       return true;
     } catch (error) {
@@ -37,10 +39,14 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
-  const register = async (email: string, name: string): Promise<boolean> => {
+  const register = async (
+    email: string,
+    password: string,
+    name: string
+  ): Promise<boolean> => {
     setIsLoading(true);
     try {
-      const user = await authService.register(email, name);
+      const user = await authService.register(email, password, name);
       setUser(user);
       return true;
     } catch (error) {
