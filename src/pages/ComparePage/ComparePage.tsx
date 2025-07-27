@@ -2,20 +2,31 @@
 
 import type React from "react";
 import { useState } from "react";
-import type { Player } from "../../types/Player";
+import type { Player, PlayerStatistics } from "../../types/Player";
 import SearchBar from "../../components/SearchBar/SearchBar";
+import { apiService } from "../../services";
 import "./ComparePage.css";
 
 const ComparePage: React.FC = () => {
   const [player1, setPlayer1] = useState<Player | null>(null);
   const [player2, setPlayer2] = useState<Player | null>(null);
+  const [player1Stats, setPlayer1Stats] = useState<PlayerStatistics | null>(
+    null
+  );
+  const [player2Stats, setPlayer2Stats] = useState<PlayerStatistics | null>(
+    null
+  );
   const [searchingFor, setSearchingFor] = useState<1 | 2 | null>(null);
 
-  const handlePlayerSelect = (player: Player) => {
+  const handlePlayerSelect = async (player: Player) => {
     if (searchingFor === 1) {
       setPlayer1(player);
+      const stats = await apiService.getPlayerStatistics(player.id);
+      setPlayer1Stats(stats[0] || null);
     } else if (searchingFor === 2) {
       setPlayer2(player);
+      const stats = await apiService.getPlayerStatistics(player.id);
+      setPlayer2Stats(stats[0] || null);
     }
     setSearchingFor(null);
   };
@@ -23,20 +34,28 @@ const ComparePage: React.FC = () => {
   const clearPlayer = (playerNumber: 1 | 2) => {
     if (playerNumber === 1) {
       setPlayer1(null);
+      setPlayer1Stats(null);
     } else {
       setPlayer2(null);
+      setPlayer2Stats(null);
     }
   };
 
-  const getComparisonValue = (player: Player, stat: string) => {
-    // Mock comparison values - replace with real data
-    const mockStats: Record<string, number> = {
-      goals: Math.floor(Math.random() * 30) + 5,
-      assists: Math.floor(Math.random() * 20) + 2,
-      matches: Math.floor(Math.random() * 40) + 20,
-      rating: Math.floor(Math.random() * 20) + 70, // 70-90 range
-    };
-    return mockStats[stat] || 0;
+  const getComparisonValue = (stats: PlayerStatistics | null, stat: string) => {
+    if (!stats) return 0;
+
+    switch (stat) {
+      case "goals":
+        return stats.goals.total;
+      case "assists":
+        return stats.goals.assists;
+      case "matches":
+        return stats.games.appearences;
+      case "rating":
+        return parseFloat(stats.games.rating) * 10; // Convert to 0-100 scale
+      default:
+        return 0;
+    }
   };
 
   return (
@@ -164,37 +183,37 @@ const ComparePage: React.FC = () => {
               <div className="stat-row">
                 <div className="stat-label">Gols</div>
                 <div className="stat-value player1">
-                  {getComparisonValue(player1, "goals")}
+                  {getComparisonValue(player1Stats, "goals")}
                 </div>
                 <div className="stat-value player2">
-                  {getComparisonValue(player2, "goals")}
+                  {getComparisonValue(player2Stats, "goals")}
                 </div>
               </div>
               <div className="stat-row">
                 <div className="stat-label">Assistências</div>
                 <div className="stat-value player1">
-                  {getComparisonValue(player1, "assists")}
+                  {getComparisonValue(player1Stats, "assists")}
                 </div>
                 <div className="stat-value player2">
-                  {getComparisonValue(player2, "assists")}
+                  {getComparisonValue(player2Stats, "assists")}
                 </div>
               </div>
               <div className="stat-row">
                 <div className="stat-label">Jogos</div>
                 <div className="stat-value player1">
-                  {getComparisonValue(player1, "matches")}
+                  {getComparisonValue(player1Stats, "matches")}
                 </div>
                 <div className="stat-value player2">
-                  {getComparisonValue(player2, "matches")}
+                  {getComparisonValue(player2Stats, "matches")}
                 </div>
               </div>
               <div className="stat-row">
                 <div className="stat-label">Avaliação</div>
                 <div className="stat-value player1">
-                  {(getComparisonValue(player1, "rating") / 10).toFixed(1)}
+                  {(getComparisonValue(player1Stats, "rating") / 10).toFixed(1)}
                 </div>
                 <div className="stat-value player2">
-                  {(getComparisonValue(player2, "rating") / 10).toFixed(1)}
+                  {(getComparisonValue(player2Stats, "rating") / 10).toFixed(1)}
                 </div>
               </div>
             </div>

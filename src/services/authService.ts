@@ -2,8 +2,6 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
-  onAuthStateChanged,
-  type User as FirebaseUser,
 } from "firebase/auth";
 import { auth } from "../lib/firebaseconfig";
 import { firestoreService } from "./firestoreService";
@@ -123,6 +121,9 @@ class AuthService {
 
       // Remove user from localStorage
       this.removeUserFromStorage();
+
+      // Limpar qualquer persistência do Firebase Auth
+      this.clearAuthPersistence();
     } catch (error) {
       console.error("Logout error:", error);
       throw error;
@@ -149,28 +150,24 @@ class AuthService {
     return this.getCurrentUser() !== null;
   }
 
-  // Listen to auth state changes
-  onAuthStateChanged(callback: (user: User | null) => void): () => void {
-    return onAuthStateChanged(
-      auth,
-      async (firebaseUser: FirebaseUser | null) => {
-        if (firebaseUser) {
-          // User is signed in
-          const user = await firestoreService.getUserByUid(firebaseUser.uid);
-          if (user) {
-            this.saveUserToStorage(user);
-            callback(user);
-          } else {
-            callback(null);
-          }
-        } else {
-          // User is signed out
-          this.removeUserFromStorage();
-          callback(null);
+  // Método para limpar persistência de autenticação
+  clearAuthPersistence(): void {
+    // Limpar localStorage
+    this.removeUserFromStorage();
+
+    // Limpar qualquer sessão persistente do Firebase
+    // Isso garante que o usuário precisa fazer login manualmente na próxima vez
+    if (typeof window !== "undefined") {
+      // Limpar todos os dados relacionados à autenticação
+      Object.keys(localStorage).forEach((key) => {
+        if (key.includes("firebase") || key.includes("auth")) {
+          localStorage.removeItem(key);
         }
-      }
-    );
+      });
+    }
   }
+
+  // Removido o método onAuthStateChanged que causava login automático
 
   private saveUserToStorage(user: User): void {
     localStorage.setItem(this.USER_STORAGE_KEY, JSON.stringify(user));

@@ -48,32 +48,56 @@ class ApiService {
 
   async getTopPlayers(): Promise<Player[]> {
     await new Promise((resolve) => setTimeout(resolve, 200));
-    return mockPlayers.slice(0, 10);
+    return mockPlayers;
   }
 
   async getRankings(type: "goals" | "assists" | "cards"): Promise<Ranking> {
     await new Promise((resolve) => setTimeout(resolve, 300));
 
-    const sortedPlayers = [...mockPlayers].sort((a, b) => {
-      // Simular diferentes rankings baseados no tipo
-      const aValue =
-        type === "goals" ? a.id * 2 : type === "assists" ? a.id * 1.5 : a.id;
-      const bValue =
-        type === "goals" ? b.id * 2 : type === "assists" ? b.id * 1.5 : b.id;
-      return bValue - aValue;
-    });
+    // Obter estatísticas para todos os jogadores
+    const playersWithStats = await Promise.all(
+      mockPlayers.map(async (player) => {
+        const stats = await this.getPlayerStatistics(player.id);
+        return { player, stats: stats[0] };
+      })
+    );
+
+    // Filtrar jogadores que têm estatísticas e ordenar baseado no tipo
+    const sortedPlayers = playersWithStats
+      .filter((item) => item.stats)
+      .sort((a, b) => {
+        let aValue = 0;
+        let bValue = 0;
+
+        switch (type) {
+          case "goals":
+            aValue = a.stats!.goals.total;
+            bValue = b.stats!.goals.total;
+            break;
+          case "assists":
+            aValue = a.stats!.goals.assists;
+            bValue = b.stats!.goals.assists;
+            break;
+          case "cards":
+            aValue = a.stats!.cards.yellow + a.stats!.cards.red;
+            bValue = b.stats!.cards.yellow + b.stats!.cards.red;
+            break;
+        }
+
+        return bValue - aValue;
+      });
 
     return {
       type,
-      players: sortedPlayers.slice(0, 10).map((player, index) => ({
-        player,
-        team: mockTeams[index % mockTeams.length],
+      players: sortedPlayers.slice(0, 10).map((item) => ({
+        player: item.player,
+        team: item.stats!.team,
         value:
           type === "goals"
-            ? 25 - index * 2
+            ? item.stats!.goals.total
             : type === "assists"
-            ? 15 - index * 1
-            : index + 1,
+            ? item.stats!.goals.assists
+            : item.stats!.cards.yellow + item.stats!.cards.red,
       })),
     };
   }

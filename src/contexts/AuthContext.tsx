@@ -12,17 +12,12 @@ interface AuthProviderProps {
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
+  // Limpar persistência de autenticação quando o componente é montado
   useEffect(() => {
-    // Set up auth state listener
-    const unsubscribe = authService.onAuthStateChanged((user) => {
-      setUser(user);
-      setIsLoading(false);
-    });
-
-    // Cleanup listener on unmount
-    return () => unsubscribe();
+    // Garantir que não há sessão persistente
+    authService.clearAuthPersistence();
   }, []);
 
   const login = async (email: string, password: string): Promise<boolean> => {
