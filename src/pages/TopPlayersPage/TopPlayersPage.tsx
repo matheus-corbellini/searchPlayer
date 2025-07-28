@@ -145,12 +145,6 @@ const TopPlayersPage: React.FC<TopPlayersPageProps> = ({ onPlayerSelect }) => {
                       <p className="podium-info text-muted">
                         {player.nationality} • {player.age} anos
                       </p>
-                      <button
-                        className="podium-btn btn btn-primary btn-sm"
-                        onClick={() => onPlayerSelect(player)}
-                      >
-                        Ver Perfil
-                      </button>
                     </div>
                   </div>
                 ))}
