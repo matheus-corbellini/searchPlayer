@@ -3,6 +3,7 @@
 ## 🎯 VISÃO GERAL DO PROJETO
 
 O **FootballSearch** é uma aplicação web desenvolvida em React com TypeScript que permite aos usuários pesquisar, visualizar e gerenciar informações sobre jogadores de futebol. O projeto implementa um sistema completo de autenticação, favoritos, comparação de jogadores e rankings.
+Deploy: https://searchplayer.netlify.app/
 
 ### 🏗️ ARQUITETURA DO PROJETO
 
