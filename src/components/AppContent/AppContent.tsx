@@ -68,7 +68,7 @@ const AppContent: React.FC = () => {
           {currentPage === "rankings" && <RankingsPage />}
 
           {currentPage === "top-players" && (
-            <TopPlayersPage onPlayerSelect={() => {}} />
+            <TopPlayersPage onPlayerSelect={handlePlayerSelect} />
           )}
 
           {currentPage === "compare" && <ComparePage />}

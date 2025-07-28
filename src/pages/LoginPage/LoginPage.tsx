@@ -3,6 +3,7 @@
 import type React from "react";
 import { useState } from "react";
 import { useAuth } from "../../hooks/useAuth";
+import Button from "../../components/Button";
 import "./LoginPage.css";
 
 interface LoginPageProps {
@@ -108,29 +109,25 @@ const LoginPage: React.FC<LoginPageProps> = ({ onNavigate }) => {
 
             {error && <div className="login-error">{error}</div>}
 
-            <button
+            <Button
               type="submit"
-              className="login-submit-btn btn btn-primary"
+              variant="primary"
+              className="login-submit-btn"
               disabled={isLoading}
+              loading={isLoading}
             >
-              {isLoading ? (
-                <div className="loading-spinner login-spinner" />
-              ) : isLogin ? (
-                "Entrar"
-              ) : (
-                "Registrar"
-              )}
-            </button>
+              {isLogin ? "Entrar" : "Registrar"}
+            </Button>
           </form>
 
           <div className="login-toggle">
-            <button
+            <Button
               type="button"
-              className="btn btn-ghost"
+              variant="ghost"
               onClick={() => setIsLogin(!isLogin)}
             >
               {isLogin ? "Não tem conta? Registre-se" : "Já tem conta? Entre"}
-            </button>
+            </Button>
           </div>
         </div>
       </div>

@@ -59,6 +59,7 @@
   backdrop-filter: blur(10px);
   box-shadow: var(--shadow-md);
   font-weight: 600;
+  padding: 0;
 }
 
 .favorite-btn::before {
@@ -129,6 +130,7 @@
   transition: all 0.3s ease;
   z-index: 1;
   position: relative;
+  display: block;
 }
 
 .player-photo {

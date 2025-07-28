@@ -7,6 +7,7 @@ import type { Player } from "../../types/Player";
 import type { SearchFilters } from "../../types/SearchFilters";
 import SearchBar from "../../components/SearchBar/SearchBar";
 import PlayerCard from "../../components/PlayerCard/PlayerCard";
+import Button from "../../components/Button";
 import "./SearchPage.css";
 
 interface SearchPageProps {
@@ -49,27 +50,29 @@ const SearchPage: React.FC<SearchPageProps> = ({ onPlayerSelect }) => {
         </div>
 
         <div className="search-controls flex items-center gap-4 mb-4">
-          <button
-            className={`btn ${showFilters ? "btn-primary" : "btn-secondary"}`}
+          <Button
+            variant={showFilters ? "primary" : "secondary"}
             onClick={() => setShowFilters(!showFilters)}
+            icon={
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <polygon points="22,3 2,3 10,12.46 10,19 14,21 14,12.46"></polygon>
+              </svg>
+            }
           >
-            <svg
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-            >
-              <polygon points="22,3 2,3 10,12.46 10,19 14,21 14,12.46"></polygon>
-            </svg>
             Filtros
-          </button>
+          </Button>
 
           {Object.keys(filters).length > 0 && (
-            <button className="btn btn-ghost" onClick={clearFilters}>
+            <Button variant="ghost" onClick={clearFilters}>
               Limpar filtros
-            </button>
+            </Button>
           )}
         </div>
 

@@ -13,6 +13,7 @@ import FavoritesPage from "../pages/FavoritesPage/FavoritesPage";
 import RankingPage from "../pages/RankingPage/RankingPage";
 import TopPlayersPage from "../pages/TopPlayersPage/TopPlayersPage";
 import ComparePage from "../pages/ComparePage/ComparePage";
+import Button from "../components/Button";
 import type { Player } from "../types/Player";
 import PlayerDetails from "../pages/PlayerDetails/PlayerDetails";
 
@@ -48,9 +49,9 @@ const AppRoutes: React.FC = () => {
             Faça login para acessar o sistema
           </p>
           <div className="text-center">
-            <button className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">
+            <Button variant="primary">
               Login
-            </button>
+            </Button>
           </div>
         </div>
       </div>

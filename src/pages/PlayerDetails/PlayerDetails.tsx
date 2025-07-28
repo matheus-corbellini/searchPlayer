@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import type { Player, PlayerStatistics } from "../../types/Player";
 import { apiService } from "../../services/api";
 import { useFavorites } from "../../hooks/useFavorites";
+import Button from "../../components/Button";
 import "./PlayerDetails.css";
 
 interface PlayerDetailsPageProps {
@@ -65,9 +66,9 @@ const PlayerDetailsPage: React.FC<PlayerDetailsPageProps> = ({
         <div className="player-detail-error card">
           <div className="card-body text-center">
             <p>Jogador não encontrado</p>
-            <button className="btn btn-primary mt-4" onClick={onBack}>
+            <Button variant="primary" className="mt-4" onClick={onBack}>
               Voltar
-            </button>
+            </Button>
           </div>
         </div>
       </div>
@@ -78,19 +79,25 @@ const PlayerDetailsPage: React.FC<PlayerDetailsPageProps> = ({
 
   return (
     <div className="player-detail-page">
-      <button className="back-button btn btn-ghost mb-6" onClick={onBack}>
-        <svg
-          width="20"
-          height="20"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-        >
-          <polyline points="15,18 9,12 15,6"></polyline>
-        </svg>
+      <Button
+        variant="ghost"
+        className="back-button mb-6"
+        onClick={onBack}
+        icon={
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+          >
+            <polyline points="15,18 9,12 15,6"></polyline>
+          </svg>
+        }
+      >
         Voltar
-      </button>
+      </Button>
 
       <div className="player-detail-grid grid grid-cols-3 gap-6">
         <div className="player-profile-card card">
@@ -130,7 +137,8 @@ const PlayerDetailsPage: React.FC<PlayerDetailsPageProps> = ({
               <div className="player-team-info mt-3">
                 <div className="team-display">
                   <span className="team-name">{currentStats.team.name}</span>
-                  <button
+                  <Button
+                    variant="ghost"
                     className={`team-favorite-btn ${
                       isTeamFavorite(currentStats.team.id) ? "active" : ""
                     }`}
@@ -140,24 +148,26 @@ const PlayerDetailsPage: React.FC<PlayerDetailsPageProps> = ({
                         ? "Remover time dos Favoritos"
                         : "Adicionar time aos Favoritos"
                     }
-                  >
-                    <svg
-                      width="16"
-                      height="16"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                    >
-                      <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"></polygon>
-                    </svg>
-                  </button>
+                    icon={
+                      <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                      >
+                        <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"></polygon>
+                      </svg>
+                    }
+                  />
                 </div>
               </div>
             )}
 
             <div className="player-actions mt-4">
-              <button
+              <Button
+                variant="ghost"
                 className={`favorite-btn ${
                   isPlayerFavorite(player.id) ? "active" : ""
                 }`}
@@ -167,18 +177,19 @@ const PlayerDetailsPage: React.FC<PlayerDetailsPageProps> = ({
                     ? "Remover dos Favoritos"
                     : "Adicionar aos Favoritos"
                 }
-              >
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                >
-                  <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"></polygon>
-                </svg>
-              </button>
+                icon={
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  >
+                    <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"></polygon>
+                  </svg>
+                }
+              />
             </div>
           </div>
         </div>
@@ -271,30 +282,33 @@ const PlayerDetailsPage: React.FC<PlayerDetailsPageProps> = ({
       {currentStats && (
         <div className="player-detailed-stats mt-6">
           <div className="stats-tabs">
-            <button
+            <Button
+              variant="ghost"
               className={`stats-tab ${
                 activeTab === "overview" ? "active" : ""
               }`}
               onClick={() => setActiveTab("overview")}
             >
               Visão Geral
-            </button>
-            <button
+            </Button>
+            <Button
+              variant="ghost"
               className={`stats-tab ${
                 activeTab === "attacking" ? "active" : ""
               }`}
               onClick={() => setActiveTab("attacking")}
             >
               Ataque
-            </button>
-            <button
+            </Button>
+            <Button
+              variant="ghost"
               className={`stats-tab ${
                 activeTab === "defending" ? "active" : ""
               }`}
               onClick={() => setActiveTab("defending")}
             >
               Defesa
-            </button>
+            </Button>
           </div>
 
           <div className="stats-content">

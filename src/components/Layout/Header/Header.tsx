@@ -4,6 +4,7 @@ import "./Header.css";
 import React from "react";
 import { useAuth } from "../../../hooks/useAuth";
 import { useTheme } from "../../../hooks/useTheme";
+import Button from "../../Button";
 
 interface HeaderProps {
   onMenuToggle: () => void;
@@ -17,25 +18,30 @@ const Header: React.FC<HeaderProps> = ({ onMenuToggle }) => {
     <header className="header">
       <div className="header-content">
         <div className="header-left">
-          <button className="menu-toggle btn btn-ghost" onClick={onMenuToggle}>
-            <svg
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-            >
-              <line x1="3" y1="6" x2="21" y2="6"></line>
-              <line x1="3" y1="12" x2="21" y2="12"></line>
-              <line x1="3" y1="18" x2="21" y2="18"></line>
-            </svg>
-          </button>
+          <Button
+            variant="ghost"
+            onClick={onMenuToggle}
+            className="menu-toggle"
+            icon={
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+              </svg>
+            }
+          />
           <h1 className="logo">⚽ FootballSearch</h1>
         </div>
 
         <div className="header-right">
-          <button className="btn btn-ghost" onClick={toggleTheme}>
+          <Button variant="ghost" onClick={toggleTheme}>
             {theme === "light" ? (
               <svg
                 width="20"
@@ -67,13 +73,14 @@ const Header: React.FC<HeaderProps> = ({ onMenuToggle }) => {
                 <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
               </svg>
             )}
-          </button>
+          </Button>
 
-          {user && (
+                      {user && (
             <div className="user-menu">
               <span className="user-name">Olá, {user.name}</span>
-              <button
-                className="btn btn-ghost btn-sm"
+              <Button
+                variant="ghost"
+                size="sm"
                 onClick={async () => {
                   try {
                     await logout();
@@ -83,7 +90,7 @@ const Header: React.FC<HeaderProps> = ({ onMenuToggle }) => {
                 }}
               >
                 Sair
-              </button>
+              </Button>
             </div>
           )}
         </div>

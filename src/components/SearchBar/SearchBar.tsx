@@ -4,6 +4,7 @@ import type React from "react";
 import { useState, useRef, useEffect } from "react";
 import type { Player } from "../../types/Player";
 import { useAutocomplete } from "../../hooks/useAutocomplete";
+import Button from "../Button";
 import "./SearchBar.css";
 
 interface SearchBarProps {
@@ -77,19 +78,24 @@ const SearchBar: React.FC<SearchBarProps> = ({
             className="search-input"
             onFocus={() => setShowSuggestions(query.length > 0)}
           />
-          <button type="submit" className="search-button">
-            <svg
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-            >
-              <circle cx="11" cy="11" r="8"></circle>
-              <path d="m21 21-4.35-4.35"></path>
-            </svg>
-          </button>
+          <Button
+            type="submit"
+            variant="primary"
+            className="search-button"
+            icon={
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <circle cx="11" cy="11" r="8"></circle>
+                <path d="m21 21-4.35-4.35"></path>
+              </svg>
+            }
+          />
         </div>
       </form>
 

@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import { apiService } from "../../services/api";
 import type { Player } from "../../types/Player";
 import PlayerCard from "../../components/PlayerCard/PlayerCard";
+import Button from "../../components/Button";
 import "./TopPlayersPage.css";
 
 interface TopPlayersPageProps {
@@ -69,33 +70,30 @@ const TopPlayersPage: React.FC<TopPlayersPageProps> = ({ onPlayerSelect }) => {
           </p>
 
           <div className="filter-tabs">
-            <button
-              className={`filter-tab btn ${
-                filter === "week" ? "btn-primary" : "btn-secondary"
-              }`}
+            <Button
+              variant={filter === "week" ? "primary" : "secondary"}
+              className="filter-tab"
               onClick={() => setFilter("week")}
+              icon={<span className="tab-icon">📅</span>}
             >
-              <span className="tab-icon">📅</span>
               Esta Semana
-            </button>
-            <button
-              className={`filter-tab btn ${
-                filter === "month" ? "btn-primary" : "btn-secondary"
-              }`}
+            </Button>
+            <Button
+              variant={filter === "month" ? "primary" : "secondary"}
+              className="filter-tab"
               onClick={() => setFilter("month")}
+              icon={<span className="tab-icon">📊</span>}
             >
-              <span className="tab-icon">📊</span>
               Este Mês
-            </button>
-            <button
-              className={`filter-tab btn ${
-                filter === "all" ? "btn-primary" : "btn-secondary"
-              }`}
+            </Button>
+            <Button
+              variant={filter === "all" ? "primary" : "secondary"}
+              className="filter-tab"
               onClick={() => setFilter("all")}
+              icon={<span className="tab-icon">🔥</span>}
             >
-              <span className="tab-icon">🔥</span>
               Mais Buscados
-            </button>
+            </Button>
           </div>
         </div>
       </div>

@@ -4,6 +4,7 @@ import type React from "react";
 import { useState } from "react";
 import type { Player, PlayerStatistics } from "../../types/Player";
 import SearchBar from "../../components/SearchBar/SearchBar";
+import Button from "../../components/Button";
 import { apiService } from "../../services";
 import "./ComparePage.css";
 
@@ -76,12 +77,13 @@ const ComparePage: React.FC = () => {
               <h3 className="search-modal-title">
                 Selecionar Jogador {searchingFor}
               </h3>
-              <button
+              <Button
+                variant="ghost"
                 className="close-btn"
                 onClick={() => setSearchingFor(null)}
               >
                 ✕
-              </button>
+              </Button>
             </div>
             <div className="search-modal-content">
               <SearchBar
@@ -99,12 +101,14 @@ const ComparePage: React.FC = () => {
             <div className="slot-header">
               <h3 className="slot-title">Jogador 1</h3>
               {player1 && (
-                <button
-                  className="clear-btn btn btn-ghost btn-sm"
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="clear-btn"
                   onClick={() => clearPlayer(1)}
                 >
                   ✕
-                </button>
+                </Button>
               )}
             </div>
 
@@ -141,12 +145,14 @@ const ComparePage: React.FC = () => {
             <div className="slot-header">
               <h3 className="slot-title">Jogador 2</h3>
               {player2 && (
-                <button
-                  className="clear-btn btn btn-ghost btn-sm"
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="clear-btn"
                   onClick={() => clearPlayer(2)}
                 >
                   ✕
-                </button>
+                </Button>
               )}
             </div>
 

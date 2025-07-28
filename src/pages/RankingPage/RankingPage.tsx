@@ -4,6 +4,7 @@ import type React from "react";
 import { useState, useEffect } from "react";
 import { apiService } from "../../services/api";
 import type { Ranking } from "../../types/SearchFilters";
+import Button from "../../components/Button";
 import "./RankingPage.css";
 
 const RankingPage: React.FC = () => {
@@ -97,33 +98,36 @@ const RankingPage: React.FC = () => {
         <h1 className="rankings-title text-3xl font-bold mb-6">🏆 Rankings</h1>
 
         <div className="rankings-tabs">
-          <button
+          <Button
+            variant="ghost"
             className={`ranking-tab ${
               activeRanking === "goals" ? "active" : ""
             }`}
             onClick={() => setActiveRanking("goals")}
+            icon={<span className="tab-icon">⚽</span>}
           >
-            <span className="tab-icon">⚽</span>
             Artilheiros
-          </button>
-          <button
+          </Button>
+          <Button
+            variant="ghost"
             className={`ranking-tab ${
               activeRanking === "assists" ? "active" : ""
             }`}
             onClick={() => setActiveRanking("assists")}
+            icon={<span className="tab-icon">🎯</span>}
           >
-            <span className="tab-icon">🎯</span>
             Assistentes
-          </button>
-          <button
+          </Button>
+          <Button
+            variant="ghost"
             className={`ranking-tab ${
               activeRanking === "cards" ? "active" : ""
             }`}
             onClick={() => setActiveRanking("cards")}
+            icon={<span className="tab-icon">🟨</span>}
           >
-            <span className="tab-icon">🟨</span>
             Cartões
-          </button>
+          </Button>
         </div>
       </div>
 
