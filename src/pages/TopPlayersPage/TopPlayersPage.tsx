@@ -12,12 +12,14 @@ interface TopPlayersPageProps {
   onPlayerSelect: (player: Player) => void;
 }
 
+// Página para exibir jogadores mais populares e buscados
 const TopPlayersPage: React.FC<TopPlayersPageProps> = ({ onPlayerSelect }) => {
   const [players, setPlayers] = useState<Player[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<"all" | "week" | "month">("week");
 
   useEffect(() => {
+    // Carrega lista de jogadores mais populares
     const loadTopPlayers = async () => {
       setLoading(true);
       try {
@@ -33,6 +35,7 @@ const TopPlayersPage: React.FC<TopPlayersPageProps> = ({ onPlayerSelect }) => {
     loadTopPlayers();
   }, [filter]);
 
+  // Retorna título baseado no filtro selecionado
   const getFilterTitle = () => {
     switch (filter) {
       case "week":

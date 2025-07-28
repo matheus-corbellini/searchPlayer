@@ -8,6 +8,7 @@ interface ThemeProviderProps {
   children: ReactNode;
 }
 
+// Provider para gerenciar tema claro/escuro da aplicação
 export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
   const [theme, setTheme] = useState<"light" | "dark">("light");
 
@@ -23,6 +24,7 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
     localStorage.setItem("theme", theme);
   }, [theme]);
 
+  // Alterna entre tema claro e escuro
   const toggleTheme = () => {
     setTheme((prev) => (prev === "light" ? "dark" : "light"));
   };

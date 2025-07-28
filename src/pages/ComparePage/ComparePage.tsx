@@ -8,6 +8,7 @@ import Button from "../../components/Button";
 import { apiService } from "../../services";
 import "./ComparePage.css";
 
+// Página para comparar estatísticas entre dois jogadores
 const ComparePage: React.FC = () => {
   const [player1, setPlayer1] = useState<Player | null>(null);
   const [player2, setPlayer2] = useState<Player | null>(null);
@@ -19,6 +20,7 @@ const ComparePage: React.FC = () => {
   );
   const [searchingFor, setSearchingFor] = useState<1 | 2 | null>(null);
 
+  // Seleciona jogador para comparação
   const handlePlayerSelect = async (player: Player) => {
     if (searchingFor === 1) {
       setPlayer1(player);
@@ -32,6 +34,7 @@ const ComparePage: React.FC = () => {
     setSearchingFor(null);
   };
 
+  // Remove jogador selecionado da comparação
   const clearPlayer = (playerNumber: 1 | 2) => {
     if (playerNumber === 1) {
       setPlayer1(null);
@@ -42,6 +45,7 @@ const ComparePage: React.FC = () => {
     }
   };
 
+  // Extrai valor específico das estatísticas para comparação
   const getComparisonValue = (stats: PlayerStatistics | null, stat: string) => {
     if (!stats) return 0;
 
@@ -53,7 +57,7 @@ const ComparePage: React.FC = () => {
       case "matches":
         return stats.games.appearences;
       case "rating":
-        return parseFloat(stats.games.rating) * 10; // Convert to 0-100 scale
+        return parseFloat(stats.games.rating) * 10;
       default:
         return 0;
     }

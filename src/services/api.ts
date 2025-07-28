@@ -6,7 +6,9 @@ import {
   generateMockStatistics,
 } from "../data/mockData";
 
+// Serviço principal para comunicação com API de dados de futebol
 class ApiService {
+  // Busca jogadores com filtros aplicados
   async searchPlayers(filters: SearchFilters): Promise<Player[]> {
     // Simular delay de rede
     await new Promise((resolve) => setTimeout(resolve, 300));
@@ -36,21 +38,25 @@ class ApiService {
     return filteredPlayers;
   }
 
+  // Busca dados de um jogador específico por ID
   async getPlayer(id: number): Promise<Player | null> {
     await new Promise((resolve) => setTimeout(resolve, 200));
     return mockPlayers.find((player) => player.id === id) || null;
   }
 
+  // Busca estatísticas detalhadas de um jogador
   async getPlayerStatistics(playerId: number): Promise<PlayerStatistics[]> {
     await new Promise((resolve) => setTimeout(resolve, 250));
     return generateMockStatistics(playerId);
   }
 
+  // Busca lista de jogadores mais populares
   async getTopPlayers(): Promise<Player[]> {
     await new Promise((resolve) => setTimeout(resolve, 200));
     return mockPlayers;
   }
 
+  // Busca rankings de gols, assistências ou cartões
   async getRankings(type: "goals" | "assists" | "cards"): Promise<Ranking> {
     await new Promise((resolve) => setTimeout(resolve, 300));
 
@@ -102,6 +108,7 @@ class ApiService {
     };
   }
 
+  // Busca sugestões de jogadores para autocompletar
   async getPlayerSuggestions(query: string): Promise<Player[]> {
     await new Promise((resolve) => setTimeout(resolve, 150));
 
@@ -114,11 +121,13 @@ class ApiService {
       .slice(0, 5);
   }
 
+  // Busca todos os jogadores disponíveis
   async getAllPlayers(): Promise<Player[]> {
     await new Promise((resolve) => setTimeout(resolve, 100));
     return mockPlayers;
   }
 
+  // Busca todos os times disponíveis
   async getAllTeams(): Promise<Team[]> {
     await new Promise((resolve) => setTimeout(resolve, 100));
     return mockTeams;

@@ -10,6 +10,7 @@ interface AuthProviderProps {
   children: ReactNode;
 }
 
+// Provider principal para gerenciar autenticação de usuários
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -20,6 +21,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     authService.clearAuthPersistence();
   }, []);
 
+  // Autentica usuário com email e senha
   const login = async (email: string, password: string): Promise<boolean> => {
     setIsLoading(true);
     try {
@@ -34,6 +36,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
+  // Registra novo usuário no sistema
   const register = async (
     email: string,
     password: string,
@@ -52,6 +55,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
+  // Desloga usuário e limpa dados da sessão
   const logout = async () => {
     setIsLoading(true);
     try {
@@ -64,6 +68,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
+  // Atualiza dados do usuário logado
   const updateUser = async (updates: Partial<User>) => {
     if (user) {
       setIsLoading(true);

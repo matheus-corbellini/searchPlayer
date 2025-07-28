@@ -13,6 +13,7 @@ interface PlayerDetailsPageProps {
   onBack: () => void;
 }
 
+// Página de detalhes completos de um jogador
 const PlayerDetailsPage: React.FC<PlayerDetailsPageProps> = ({
   playerId,
   onBack,
@@ -29,6 +30,7 @@ const PlayerDetailsPage: React.FC<PlayerDetailsPageProps> = ({
   } = useFavorites();
 
   useEffect(() => {
+    // Carrega dados completos do jogador e suas estatísticas
     const loadPlayerData = async () => {
       setLoading(true);
       try {

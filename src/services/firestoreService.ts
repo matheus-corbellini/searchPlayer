@@ -12,9 +12,11 @@ import {
 import { db } from "../lib/firebaseconfig";
 import type { User } from "../types/User";
 
+// Serviço para comunicação com Firestore (banco de dados)
 class FirestoreService {
   private readonly USERS_COLLECTION = "users";
 
+  // Salva usuário no banco de dados Firestore
   async saveUser(user: User): Promise<void> {
     const userRef = doc(db, this.USERS_COLLECTION, user.uid);
     const userData = {
@@ -27,6 +29,7 @@ class FirestoreService {
     await setDoc(userRef, userData, { merge: true });
   }
 
+  // Busca usuário por UID no Firestore
   async getUserByUid(uid: string): Promise<User | null> {
     const userRef = doc(db, this.USERS_COLLECTION, uid);
     const userSnap = await getDoc(userRef);
@@ -38,6 +41,7 @@ class FirestoreService {
     return null;
   }
 
+  // Busca usuário por email no Firestore
   async getUserByEmail(email: string): Promise<User | null> {
     const usersRef = collection(db, this.USERS_COLLECTION);
     const q = query(usersRef, where("email", "==", email));
@@ -51,6 +55,7 @@ class FirestoreService {
     return null;
   }
 
+  // Atualiza dados do usuário no Firestore
   async updateUser(uid: string, updates: Partial<User>): Promise<void> {
     const userRef = doc(db, this.USERS_COLLECTION, uid);
     const updateData = {
@@ -61,6 +66,7 @@ class FirestoreService {
     await updateDoc(userRef, updateData);
   }
 
+  // Remove usuário do Firestore
   async deleteUser(uid: string): Promise<void> {
     const userRef = doc(db, this.USERS_COLLECTION, uid);
     await deleteDoc(userRef);

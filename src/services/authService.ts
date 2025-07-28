@@ -7,9 +7,11 @@ import { auth } from "../lib/firebaseconfig";
 import { firestoreService } from "./firestoreService";
 import type { User } from "../types/User";
 
+// Serviço para gerenciar autenticação e dados do usuário
 class AuthService {
   private readonly USER_STORAGE_KEY = "user";
 
+  // Registra novo usuário no sistema
   async register(email: string, password: string, name: string): Promise<User> {
     try {
       const userCredential = await createUserWithEmailAndPassword(
@@ -44,6 +46,7 @@ class AuthService {
     }
   }
 
+  // Autentica usuário com email e senha
   async login(email: string, password: string): Promise<User> {
     try {
       const userCredential = await signInWithEmailAndPassword(
@@ -82,6 +85,7 @@ class AuthService {
     }
   }
 
+  // Atualiza dados do usuário logado
   async updateUser(updates: Partial<User>): Promise<User> {
     const currentUser = this.getCurrentUser();
     if (!currentUser) {
@@ -101,6 +105,7 @@ class AuthService {
     }
   }
 
+  // Desloga usuário e limpa dados da sessão
   async logout(): Promise<void> {
     try {
       await signOut(auth);
@@ -114,6 +119,7 @@ class AuthService {
     }
   }
 
+  // Retorna usuário atualmente logado
   getCurrentUser(): User | null {
     const storedUser = localStorage.getItem(this.USER_STORAGE_KEY);
     if (storedUser) {
@@ -128,10 +134,12 @@ class AuthService {
     return null;
   }
 
+  // Verifica se há usuário autenticado
   isAuthenticated(): boolean {
     return this.getCurrentUser() !== null;
   }
 
+  // Limpa persistência de autenticação
   clearAuthPersistence(): void {
     this.removeUserFromStorage();
 
@@ -146,10 +154,12 @@ class AuthService {
     }
   }
 
+  // Salva dados do usuário no localStorage
   private saveUserToStorage(user: User): void {
     localStorage.setItem(this.USER_STORAGE_KEY, JSON.stringify(user));
   }
 
+  // Remove dados do usuário do localStorage
   private removeUserFromStorage(): void {
     localStorage.removeItem(this.USER_STORAGE_KEY);
   }

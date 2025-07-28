@@ -9,6 +9,7 @@ import PlayerCard from "../../components/PlayerCard/PlayerCard";
 import TeamCard from "../../components/TeamCard/TeamCard";
 import type { Player, Team } from "../../types/Player";
 
+// Página para exibir jogadores e times favoritos do usuário
 const FavoritesPage: React.FC = () => {
   const { user } = useAuth();
   const { favoritePlayers, favoriteTeams } = useFavorites();
@@ -17,9 +18,9 @@ const FavoritesPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Carrega dados dos favoritos do usuário
     const loadFavorites = async () => {
       try {
-        // Load player details for favorite player IDs
         if (favoritePlayers.length > 0) {
           const playerPromises = favoritePlayers.map((id) =>
             apiService.getPlayer(id)
@@ -33,7 +34,6 @@ const FavoritesPage: React.FC = () => {
           setPlayers([]);
         }
 
-        // Load team details for favorite team IDs
         if (favoriteTeams.length > 0) {
           const allTeams = await apiService.getAllTeams();
           const favoriteTeamObjects = allTeams.filter((team) =>

@@ -4,11 +4,13 @@ import { useState, useEffect, useCallback } from "react";
 import type { Player } from "../types/Player";
 import { apiService } from "../services/api";
 
+// Hook para autocompletar busca de jogadores com debounce
 export const useAutocomplete = (delay = 300) => {
   const [query, setQuery] = useState("");
   const [suggestions, setSuggestions] = useState<Player[]>([]);
   const [loading, setLoading] = useState(false);
 
+  // Busca jogadores baseado na query de pesquisa
   const searchPlayers = useCallback(async (searchQuery: string) => {
     if (searchQuery.length < 2) {
       setSuggestions([]);
@@ -27,6 +29,7 @@ export const useAutocomplete = (delay = 300) => {
     }
   }, []);
 
+  // Busca com debounce para evitar muitas requisições
   const debouncedSearch = useCallback(async (searchQuery: string) => {
     if (searchQuery.length < 2) {
       setSuggestions([]);

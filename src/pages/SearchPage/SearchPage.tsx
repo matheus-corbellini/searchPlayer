@@ -14,15 +14,18 @@ interface SearchPageProps {
   onPlayerSelect: (player: Player) => void;
 }
 
+// Página principal de busca e filtros de jogadores
 const SearchPage: React.FC<SearchPageProps> = ({ onPlayerSelect }) => {
   const { players, loading, error, searchPlayers } = useSearch();
   const [filters, setFilters] = useState<SearchFilters>({});
   const [showFilters, setShowFilters] = useState(false);
 
+  // Executa busca de jogadores com query
   const handleSearch = (query: string) => {
     searchPlayers({ ...filters, name: query });
   };
 
+  // Atualiza filtros de busca e executa nova pesquisa
   const handleFilterChange = (
     key: keyof SearchFilters,
     value: string | number
@@ -34,6 +37,7 @@ const SearchPage: React.FC<SearchPageProps> = ({ onPlayerSelect }) => {
     }
   };
 
+  // Limpa todos os filtros aplicados
   const clearFilters = () => {
     setFilters({});
   };

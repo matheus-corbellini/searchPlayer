@@ -7,6 +7,7 @@ import type { Ranking } from "../../types/SearchFilters";
 import Button from "../../components/Button";
 import "./RankingPage.css";
 
+// Página para exibir rankings de gols, assistências e cartões
 const RankingPage: React.FC = () => {
   const [rankings, setRankings] = useState<{
     goals?: Ranking;
@@ -20,6 +21,7 @@ const RankingPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    // Carrega todos os rankings disponíveis
     const loadRankings = async () => {
       setLoading(true);
       setError(null);
@@ -43,6 +45,7 @@ const RankingPage: React.FC = () => {
     loadRankings();
   }, []);
 
+  // Retorna título do ranking baseado no tipo
   const getRankingTitle = (type: string) => {
     switch (type) {
       case "goals":
@@ -56,6 +59,7 @@ const RankingPage: React.FC = () => {
     }
   };
 
+  // Retorna ícone do ranking baseado no tipo
   const getRankingIcon = (type: string) => {
     switch (type) {
       case "goals":

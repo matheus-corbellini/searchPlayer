@@ -10,6 +10,7 @@ interface LoginPageProps {
   onNavigate: (page: string) => void;
 }
 
+// Página de login e registro de usuários
 const LoginPage: React.FC<LoginPageProps> = ({ onNavigate }) => {
   const [isLogin, setIsLogin] = useState(true);
   const [formData, setFormData] = useState({
@@ -20,6 +21,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onNavigate }) => {
   const [error, setError] = useState("");
   const { login, register, isLoading } = useAuth();
 
+  // Processa submissão do formulário de login/registro
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
@@ -48,6 +50,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onNavigate }) => {
     }
   };
 
+  // Atualiza estado do formulário conforme usuário digita
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData((prev) => ({
       ...prev,
