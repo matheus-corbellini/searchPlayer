@@ -10,10 +10,8 @@ import type { User } from "../types/User";
 class AuthService {
   private readonly USER_STORAGE_KEY = "user";
 
-  // Register new user
   async register(email: string, password: string, name: string): Promise<User> {
     try {
-      // Create user in Firebase Auth
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         email,
@@ -21,7 +19,6 @@ class AuthService {
       );
       const firebaseUser = userCredential.user;
 
-      // Create user document in Firestore
       const newUser: User = {
         uid: firebaseUser.uid,
         email: firebaseUser.email!,
@@ -38,7 +35,6 @@ class AuthService {
 
       await firestoreService.saveUser(newUser);
 
-      // Store user in localStorage
       this.saveUserToStorage(newUser);
 
       return newUser;
@@ -142,7 +138,6 @@ class AuthService {
     // Limpar qualquer sessão persistente do Firebase
     // Isso garante que o usuário precisa fazer login manualmente na próxima vez
     if (typeof window !== "undefined") {
-      // Limpar todos os dados relacionados à autenticação
       Object.keys(localStorage).forEach((key) => {
         if (key.includes("firebase") || key.includes("auth")) {
           localStorage.removeItem(key);
@@ -150,8 +145,6 @@ class AuthService {
       });
     }
   }
-
-  // Removido o método onAuthStateChanged que causava login automático
 
   private saveUserToStorage(user: User): void {
     localStorage.setItem(this.USER_STORAGE_KEY, JSON.stringify(user));

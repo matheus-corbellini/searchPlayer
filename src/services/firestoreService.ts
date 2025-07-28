@@ -15,7 +15,6 @@ import type { User } from "../types/User";
 class FirestoreService {
   private readonly USERS_COLLECTION = "users";
 
-  // Create or update user document
   async saveUser(user: User): Promise<void> {
     const userRef = doc(db, this.USERS_COLLECTION, user.uid);
     const userData = {
@@ -28,7 +27,6 @@ class FirestoreService {
     await setDoc(userRef, userData, { merge: true });
   }
 
-  // Get user by UID
   async getUserByUid(uid: string): Promise<User | null> {
     const userRef = doc(db, this.USERS_COLLECTION, uid);
     const userSnap = await getDoc(userRef);
@@ -40,7 +38,6 @@ class FirestoreService {
     return null;
   }
 
-  // Get user by email
   async getUserByEmail(email: string): Promise<User | null> {
     const usersRef = collection(db, this.USERS_COLLECTION);
     const q = query(usersRef, where("email", "==", email));
@@ -54,7 +51,6 @@ class FirestoreService {
     return null;
   }
 
-  // Update user
   async updateUser(uid: string, updates: Partial<User>): Promise<void> {
     const userRef = doc(db, this.USERS_COLLECTION, uid);
     const updateData = {
@@ -65,7 +61,6 @@ class FirestoreService {
     await updateDoc(userRef, updateData);
   }
 
-  // Delete user
   async deleteUser(uid: string): Promise<void> {
     const userRef = doc(db, this.USERS_COLLECTION, uid);
     await deleteDoc(userRef);
